@@ -89,3 +89,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Administración App Kine UCN",
+    "site_header": "Administración Kinesiología",
+    "welcome_sign": "Bienvenida al Sistema de Casos Clínicos UCN",
+    "site_brand": "UCN Kinesiología",
+    "site_logo": "img/logo_UCN",
+    "custom_css": "css/admin_custom.css",
+    "custom_js": None,
+}
