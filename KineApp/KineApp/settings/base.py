@@ -22,7 +22,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #aplicaciones propias
+    'applications.Perfil',
     'applications.Etapa',
+    'applications.Categoria',
+    'applications.Paciente',
+
+
+
 
 ]
 
@@ -95,8 +101,8 @@ JAZZMIN_SETTINGS = {
     "site_title": "Administración App Kine UCN",
     "site_header": "Administración Kinesiología",
     "welcome_sign": "Bienvenida al Sistema de Casos Clínicos UCN",
-    "site_brand": "UCN Kinesiología",
-    "site_logo": "img/logo_UCN",
+    "site_brand": "Sistema Kinesiología",
+    "site_logo": "img/logoucn_medicina.png",
     "custom_css": "css/admin_custom.css",
     "custom_js": None,
 }

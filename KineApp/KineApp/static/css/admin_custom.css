@@ -1,11 +1,12 @@
 :root {
   --primary: #003057;
-  --secondary: #8C5E2C;
+  --secondary: #F47A20;
   --background: #F2F2F2;
 }
 
 /* ======= Cabecera y sidebar ======= */
-.main-header {
+.main-header,
+.main-sidebar {
   background-color: var(--primary) !important;
   color: white !important;
 }
@@ -14,7 +15,8 @@
 .main-header i,
 .navbar a,
 .navbar-brand,
-.navbar .nav-link {
+.navbar .nav-link,
+.main-sidebar a {
   color: white !important;
 }
 
@@ -38,8 +40,8 @@
 button.btn-primary,
 a.btn-primary,
 input[type="submit"].btn-primary {
-  background-color: #8C5E2C !important;
-  border-color: #8C5E2C !important;
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
   color: #fff !important;
 }
 
@@ -47,8 +49,8 @@ input[type="submit"].btn-primary {
 button.btn-primary:hover,
 a.btn-primary:hover,
 input[type="submit"].btn-primary:hover {
-  background-color: #6B4620 !important;
-  border-color: #6B4620 !important;
+  background-color: #be6518 !important;
+  border-color: #be6518 !important;
   color: #fff !important;
 }
 
@@ -56,8 +58,8 @@ input[type="submit"].btn-primary:hover {
 .btn.btn-secondary,
 button.btn-secondary,
 a.btn-secondary {
-  background-color: #003057 !important;
-  border-color: #003057 !important;
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
   color: #fff !important;
 }
 
