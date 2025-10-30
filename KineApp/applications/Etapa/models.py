@@ -12,3 +12,13 @@ class Etapa(models.Model):
     def __str__(self):
         return str(self.id) + '-'+ self.fase
     
+
+class Pregunta(models.Model):
+    #id_pregunta = models.AutoField(primary_key=True)
+    #pregunta_caso = models.ForeignKey(PreguntaCasoClinico, on_delete=models.CASCADE, related_name="preguntas")
+    texto_pregunta = models.TextField()
+    respuesta_correcta = models.TextField(blank=True, null=True)
+
+    
+    def __str__(self):
+        return str(self.id) + '-'+ self.texto_pregunta
