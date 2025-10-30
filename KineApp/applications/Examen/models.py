@@ -17,3 +17,18 @@ class ExamenFinal(models.Model):
         return str(self.id) + '-'+ self.nombre
 
 
+class Preguntas_Examen_Final(models.Model):
+   # id_pregunta_exf = models.AutoField(primary_key=True)
+    texto_pregunta_exf = models.TextField()
+    resultado_corregido_exf = models.CharField(max_length=50, null=True, blank=True)
+  #  examen_final = models.ForeignKey(
+   #     ExamenFinal, on_delete=models.CASCADE, related_name="preguntas_exf"
+   # )
+
+  #  class Meta:
+   #     db_table = "Preguntas_Exf"
+
+    def __str__(self):
+        return str(self.id) + '-'+ self.texto_pregunta_exf
+
+
