@@ -22,7 +22,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #aplicaciones propias
-    'applications.Perfil',
     'applications.Etapa',
     'applications.Categoria',
     'applications.Paciente',
