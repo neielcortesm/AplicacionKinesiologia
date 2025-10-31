@@ -10,6 +10,12 @@ class Caso(models.Model):
     paciente = models.ForeignKey('Paciente.FichaPaciente', on_delete=models.CASCADE, null=True, blank=True)
     docente = models.ForeignKey('Perfil.Docente', on_delete=models.CASCADE, null=True, blank=True)
 
+    estudiantes = models.ManyToManyField(
+        'Perfil.Estudiante',         # nombre de la app + modelo
+        related_name='casos_clinicos',  # para acceder desde el estudiante
+        blank=True
+    )
+
     def __str__(self):
         return str(self.id)+'-'+self.Descripción+str(self.categoria)
     
