@@ -104,4 +104,22 @@ JAZZMIN_SETTINGS = {
     "site_logo": "img/logoucn_medicina.png",
     "custom_css": "css/admin_custom.css",
     "custom_js": None,
+    "icons": {
+        "casoClinico.Caso": "fas fa-notes-medical",               # Casos clínicos
+        "Categoria.Categoria": "fas fa-list",                      # Categorías
+        "Etapa.Etapa": "fas fa-stream",                            # Etapas
+        "Etapa.Pregunta": "fas fa-question",                       # Preguntas
+        "Examen.ExamenFinal": "fas fa-file-alt",                   # Examen final
+        "Examen.Preguntas_Examen_Final": "fas fa-question-circle", # Preguntas examen final
+        "Paciente.FichaPaciente": "fas fa-user-injured",           # Ficha paciente
+        "Perfil.Administrador": "fas fa-user-shield",              # Administrador
+        "Perfil.Docente": "fas fa-chalkboard-teacher",             # Docentes
+        "Perfil.Estudiante": "fas fa-user-graduate",               # Estudiantes
+    },
+    "default_icon_parents": "fas fa-folder",    # Icono por defecto de aplicaciones
+    "default_icon_children": "fas fa-circle",
 }
+JAZZMIN_SETTINGS["icons"].update({
+    "auth.Group": "fas fa-users-cog",    # Icono para Grupos
+    "auth.User": "fas fa-user",          # Icono para Usuarios
+})
