@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'applications.Paciente',
     'applications.Examen',   
     'applications.casoClinico',
+    'applications.Perfil'
 
 ]
 
