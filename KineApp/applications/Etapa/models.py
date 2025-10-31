@@ -16,7 +16,7 @@ class Pregunta(models.Model):
     respuesta_correcta = models.TextField(blank=True, null=True)
 
     # 🔑 Aquí agregas la llave foránea hacia Etapa
-    etapa = models.ForeignKey('Etapa', on_delete=models.CASCADE, related_name='preguntas')
+    etapa = models.ForeignKey('Etapa', on_delete=models.CASCADE, related_name='preguntas',  null=True, blank=True)
 
     def __str__(self):
         return f"{self.id} - {self.texto_pregunta}"
