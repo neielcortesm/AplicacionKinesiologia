@@ -8,7 +8,7 @@ class Estudiante(models.Model):
     contrasena = models.CharField('Contraseña', max_length=100, null=False)
     estado = models.BooleanField('Activo', default=True)
 
-    def __str__(self): 
+    def _str_(self):
         return str(self.id)+'-'+self.nombre + '-' + self.apellido+'-'+self.correo
 
 class Docente(models.Model):
@@ -18,7 +18,7 @@ class Docente(models.Model):
     contrasena = models.CharField('Contraseña', max_length=100, null=False)
     estado = models.BooleanField('Activo', default=True)
 
-    def __str__(self): 
+    def _str_(self):
         return str(self.id)+'-'+self.nombre + '-' + self.apellido+'-'+self.correo
 
 class Administrador(models.Model):
@@ -28,5 +28,5 @@ class Administrador(models.Model):
     contrasena = models.CharField('Contraseña', max_length=100, null=False)
     estado = models.BooleanField('Activo', default=True)
 
-    def __str__(self): 
+    def _str_(self):
         return str(self.id)+'-'+self.nombre + '-' + self.apellido+'-'+self.correo
