@@ -1,12 +1,11 @@
 from django.contrib import admin
 from .models import *
 # Register your models here.
-class EtapaAdmin(admin.ModelAdmin):
+class CasoAdmin(admin.ModelAdmin):
     list_display=(
        'nombre', 
-       'caso',
-
+       'categoria',
+       'docente',
     )
     search_fields=('nombre',)
-admin.site.register(Etapa, EtapaAdmin)
-# Register your models here.
+admin.site.register(CasoClinico, CasoAdmin)

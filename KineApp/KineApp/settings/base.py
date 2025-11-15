@@ -22,13 +22,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #aplicaciones propias
-    'applications.Etapa',
     'applications.Categoria',
+    'applications.Perfil',
     'applications.Paciente',
-    'applications.Examen',   
-    'applications.casoClinico',
-    'applications.Perfil'
-
+    'applications.Caso_Clinico',
+    'applications.Examen',
+    'applications.Etapa',
+    'applications.Pregunta', 
 ]
 
 MIDDLEWARE = [
@@ -46,7 +46,7 @@ ROOT_URLCONF = 'KineApp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'KineApp' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,17 +105,41 @@ JAZZMIN_SETTINGS = {
     "custom_css": "css/admin_custom.css",
     "custom_js": None,
     "icons": {
-        "casoClinico.Caso": "fas fa-notes-medical",               # Casos clínicos
+        "Caso_Clinico.CasoClinico": "fas fa-notes-medical",               # Casos clínicos
         "Categoria.Categoria": "fas fa-list",                      # Categorías
         "Etapa.Etapa": "fas fa-stream",                            # Etapas
-        "Etapa.Pregunta": "fas fa-question",                       # Preguntas
         "Examen.ExamenFinal": "fas fa-file-alt",                   # Examen final
-        "Examen.Preguntas_Examen_Final": "fas fa-question-circle", # Preguntas examen final
+        "Examen.PreguntaExamenFinal": "fas fa-question-circle", # Preguntas examen final
         "Paciente.FichaPaciente": "fas fa-user-injured",           # Ficha paciente
         "Perfil.Administrador": "fas fa-user-shield",              # Administrador
         "Perfil.Docente": "fas fa-chalkboard-teacher",             # Docentes
-        "Perfil.Estudiante": "fas fa-user-graduate",               # Estudiantes
+        "Perfil.Estudiante": "fas fa-user-graduate",
+        "Pregunta.Pregunta": "fas fa-question",                       # Preguntas
     },
+     # Top Menu #
+    ############
+    # Links to put along the top menu
+    "topmenu_links": [
+
+        # Url that gets reversed (Permissions can be added)
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+
+        # external url that opens in a new window (Permissions can be added)
+        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
+
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        {"app": "Caso_Clinico"},
+        {"app": "Categoria"},
+        {"app": "Perfil"},
+    ],
+     # Additional links to include in the user menu on the top right ("app" url type is not allowed)
+    "usermenu_links": [
+        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
+        {"model": "auth.user"}
+    ],
     "default_icon_parents": "fas fa-folder",    # Icono por defecto de aplicaciones
     "default_icon_children": "fas fa-circle",
 }

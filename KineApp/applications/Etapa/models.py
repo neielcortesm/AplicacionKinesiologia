@@ -1,22 +1,22 @@
 from django.db import models
-
-# --- MODELO ETAPA ---
+from applications.Caso_Clinico.models import CasoClinico
+# entrevista clinica, amnesis
+#examen fisico
+#examen final
+#preguntas
+#subcategorias
+    #sintomas, #actividades recreativas, ##ocupacion, trabajo
 class Etapa(models.Model):
-    fase = models.CharField('Fase Etapa', max_length=100, null=False)
-    descripcion = models.TextField('Descripción Etapa', null=True, max_length=200)
-    video_url = models.URLField('Video', null=False, help_text="Ingresa el enlace del video de Youtube.")
+    ETAPAS = [
+        ('entrevista_clinica', 'Entrevista Clínica (Amnesis)'),
+        ('examen_fisico', 'Examen Físico'),
+        ('conclusion_final', 'Conclusión Final'),
+    ]
+    nombre = models.CharField(max_length=30, choices=ETAPAS, unique=True)
+    descripcion = models.TextField('Descripción Etapa 1', null=True, max_length=200)
+    video_url = models.URLField('Video', null=True, help_text="Ingresa el enlace del video de Youtube.")
+    caso = models.ForeignKey(CasoClinico, on_delete=models.CASCADE, related_name='etapas')
 
     def __str__(self):
-        return f"{self.id} - {self.fase}"
-
-
-# --- MODELO PREGUNTA ---
-class Pregunta(models.Model):
-    texto_pregunta = models.TextField()
-    respuesta_correcta = models.TextField(blank=True, null=True)
-
-    # 🔑 Aquí agregas la llave foránea hacia Etapa
-    etapa = models.ForeignKey('Etapa', on_delete=models.CASCADE, related_name='preguntas',  null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.id} - {self.texto_pregunta}"
+        return dict(self.ETAPAS).get(self.nombre, 'Desconocido')
+    

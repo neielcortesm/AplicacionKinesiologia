@@ -1,5 +1,6 @@
 from django.db import models
-from django.db import models
+
+# Create your models here.
 
 class Estudiante(models.Model):
     nombre = models.CharField('Nombre', max_length=100, null=False)
@@ -8,8 +9,10 @@ class Estudiante(models.Model):
     contrasena = models.CharField('Contraseña', max_length=100, null=False)
     estado = models.BooleanField('Activo', default=True)
 
-    def __str__(self): 
+
+    def __str__(self):
         return str(self.id)+'-'+self.nombre + '-' + self.apellido+'-'+self.correo
+
 
 class Docente(models.Model):
     nombre = models.CharField('Nombre', max_length=100, null=False)
@@ -18,8 +21,10 @@ class Docente(models.Model):
     contrasena = models.CharField('Contraseña', max_length=100, null=False)
     estado = models.BooleanField('Activo', default=True)
 
-    def __str__(self): 
+
+    def __str__(self):
         return str(self.id)+'-'+self.nombre + '-' + self.apellido+'-'+self.correo
+
 
 class Administrador(models.Model):
     nombre = models.CharField('Nombre', max_length=100, null=False)
@@ -28,5 +33,10 @@ class Administrador(models.Model):
     contrasena = models.CharField('Contraseña', max_length=100, null=False)
     estado = models.BooleanField('Activo', default=True)
 
-    def __str__(self): 
+    class Meta:
+        verbose_name='Administrador'
+        verbose_name_plural="Administradores"
+        ordering=['nombre','apellido']
+
+    def __str__(self):
         return str(self.id)+'-'+self.nombre + '-' + self.apellido+'-'+self.correo
