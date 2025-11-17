@@ -123,7 +123,7 @@ a.btn-secondary:hover {
 .content-wrapper .btn.btn-success:hover,
 .content-wrapper .btn-success:hover,
 .card-footer .btn.btn-success:hover {
-    background-color: var(--secondary)  !important;   /* verde más oscuro al hover */
-    border-color: var(--secondary)  !important;
+    background-color: #be6518  !important;   
+    border-color: #be6518  !important;
 }
 

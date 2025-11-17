@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{%block title}Kine{%endblock title}</title>
+    <title>{% block title %}Kine{% endblock title %}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -118,7 +118,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                    <h1 class="mb-5"><span class="text-uppercase text-primary bg-light px-2">History</span> of Our
+                    <h1 class="mb-5"><span class="text-uppercase text-primary bg-light px-2">Inicio</span> of Our
                         Creation</h1>
                     <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam
                         amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus
@@ -152,7 +152,10 @@
     </div>
     <!-- About End -->
 
+{%block content %}
 
+
+{%endblock content %}
     <!-- Team Start -->
     <div class="container-fluid bg-light py-5">
         <div class="container py-5">
@@ -256,11 +259,7 @@
     </div>
     <!-- Team End -->
 
-{%block content}
 
-
-{%endblock content}
-    <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 footer pt-5">
         <div class="container py-5">
             <div class="row g-5">

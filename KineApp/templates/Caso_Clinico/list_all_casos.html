@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{%load static %}
+{%block title %} Lista Casos Clínicos {%endblock title %}
+
+{%block content %}
+    <!-- Feature Start -->
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <div class="text-center wow fadeIn" data-wow-delay="0.1s">
+                <h1 class="mb-5">Lista de <span class="text-uppercase text-primary bg-light px-2">Casos Clínicos</span>
+                </h1>
+            </div>
+                {{ListAllCasos}}
+        </div>
+    </div>
+    <!-- Feature End -->
+{%endblock content %}
