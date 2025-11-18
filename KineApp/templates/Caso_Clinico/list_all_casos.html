@@ -10,7 +10,35 @@
                 <h1 class="mb-5">Lista de <span class="text-uppercase text-primary bg-light px-2">Casos Clínicos</span>
                 </h1>
             </div>
-                {{ListAllCasos}}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre Caso</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Paciente</th>
+                        <th scope="col">Puntaje Total</th>
+                        <th scope="col">Acción</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in ListAllCasos %}
+                    <tr>
+                        <th scope="row">{{i.nombre}}</th>
+                        <th scope="row">{{i.categoria}}</th>
+                        <th scope="row">{{i.paciente}}</th>
+                        <th scope="row">{{i.puntaje_total}}</th>
+                        <th scope="row">
+                            <button type="button" class="btn btn-outline-dark">🔍</button>
+                            <button type="button" class="btn btn-outline-primary">✍</button>
+                            <button type="button" class="btn btn-outline-danger">🗑</button>
+
+                        </th>
+                    
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
     <!-- Feature End -->
