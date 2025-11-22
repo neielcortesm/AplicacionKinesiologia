@@ -8,4 +8,4 @@ class Categoria(models.Model):
     descripcion = models.TextField(blank=True, null=True)
    # imagen = models.ImageField(upload_to='categorias/', blank=True, null=True)
     def __str__(self):
-        return str(self.id) + '-'+ self.nombre
+        return self.nombre

@@ -9,11 +9,11 @@ from applications.Caso_Clinico.models import CasoClinico
 class Etapa(models.Model):
     ETAPAS = [
         ('entrevista_clinica', 'Entrevista Clínica (Amnesis)'),
-        ('examen_fisico', 'Examen Físico'),
-        ('conclusion_final', 'Conclusión Final'),
+        ('examen_fisico', 'Exámen Físico'),
+        ('examen_final', 'Exámen Final'),
     ]
     nombre = models.CharField(max_length=30, choices=ETAPAS, unique=True)
-    descripcion = models.TextField('Descripción Etapa 1', null=True, max_length=200)
+    descripcion = models.TextField('Descripción Etapa', null=True, max_length=200)
     video_url = models.URLField('Video', null=True, help_text="Ingresa el enlace del video de Youtube.")
     caso = models.ForeignKey(CasoClinico, on_delete=models.CASCADE, related_name='etapas')
 

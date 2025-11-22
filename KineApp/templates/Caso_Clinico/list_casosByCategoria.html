@@ -1,46 +1,29 @@
+
 {% extends 'base.html' %}
 {%load static %}
 {%block title %} Lista Casos Clínicos {%endblock title %}
 
-
 {%block content %}
-
-
-
-
-
-
     <!-- Feature Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
             <div class="text-center wow fadeIn" data-wow-delay="0.1s">
-                <h1 class="mb-5">Lista de <span class="text-uppercase text-primary bg-light px-2">Casos Clínicos</span>
+                <h1 class="mb-5">Lista de <span class="text-uppercase text-primary bg-light px-2">Casos Clínicos por Categoria</span>
                 </h1>
             </div>
-            <!-- Formulario de búsqueda estilizado -->
-          <!-- <form method="get" class="row g-3 justify-content-center mb-4">
-                {% csrf_token %}
-                <div class="col-auto">
-                    <input type="text" id="kword" name="kword" class="form-control" placeholder="Escriba Caso Clínico aquí">
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                </div>
-            </form>-->
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Nombre Caso</th>
-                        <th scope="col">Categoría</th>
+                        <th scope="col">Categoría</th> 
                         <th scope="col">Paciente</th>
                         <th scope="col">Puntaje Total</th>
                         <th scope="col">Acción</th>
 
-
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in ListAllCasos %}
+                    {% for i in ListByCategoriaCasos %}
                     <tr>
                         <th scope="row">{{i.nombre}}</th>
                         <th scope="row">{{i.categoria}}</th>
@@ -51,9 +34,8 @@
                             <button type="button" class="btn btn-outline-primary">✍</button>
                             <button type="button" class="btn btn-outline-danger">🗑</button>
 
-
                         </th>
-                   
+                    
                     </tr>
                     {% endfor %}
                 </tbody>

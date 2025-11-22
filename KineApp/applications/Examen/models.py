@@ -6,7 +6,6 @@ class ExamenFinal(models.Model):
     nombre = models.CharField('Nombre Examen', max_length=100, null=False)
     fecha = models.DateField(auto_now_add=True)
     puntaje_total = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    resultado_final = models.CharField(max_length=50, null=True, blank=True)
     descripcion = models.TextField('Descripción Examen', null=True, max_length=200)
     caso = models.OneToOneField(CasoClinico, on_delete=models.CASCADE, related_name='examen_final')
 

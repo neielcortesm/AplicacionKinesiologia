@@ -21,14 +21,13 @@ class FichaPaciente(models.Model):
     sexo = models.CharField(max_length=1, choices=SEXO_CHOICES, null=True, blank=True)
     direccion = models.CharField(max_length=255, null=True, blank=True)
     telefono = models.CharField(max_length=20, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
     prevision = models.CharField(max_length=20, choices=PREVISION_CHOICES, null=True, blank=True)
     ocupacion = models.CharField(max_length=100, null=True, blank=True)
     habitos = models.TextField(null=True, blank=True)
    
 
     def __str__(self):
-        return f"{self.nombre} ({self.rut})"
+        return f"{self.nombre}"
     def save(self, *args, **kwargs):
         # Calcula la edad automáticamente antes de guardar
         if self.fecha_nacimiento:
