@@ -35,7 +35,7 @@ def login_view(request):
 
     # 🔁 envía al HOME
     # Si tu URL del home se llama 'home', usa:
-            return redirect('home')
+            return redirect('Inicio')
         messages.error(request, "Correo o contraseña incorrectos.")
 
     return render(request, 'login.html')

@@ -1,4 +1,9 @@
 /********** Template CSS **********/
+:root {
+  --primary: #003057;
+  --secondary: #F47A20;
+  --background: #F2F2F2;
+}
 
 /*** Spinner ***/
 #spinner {
@@ -461,4 +466,33 @@
     margin-right: 0;
     padding-right: 0;
     border-right: none;
+}
+
+.header-image-wrapper {
+    position: relative;
+    padding: 45px;
+    background-color: var(--bs-primary);  /* azul o el color que quieras */
+}
+
+.header-image-wrapper img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.header-image-wrapper {
+    max-width: 380px;      /* ajusta el valor a gusto */
+    margin-left: auto;     /* la pega al lado derecho de la columna */
+}
+
+.header-image-wrapper img {
+    width: 100%;
+    height: auto;
+}
+.video-container{
+  max-width: 900px;   /* sube este valor para que se vea más grande */
+  margin: 40px auto;  /* centrado horizontal */
+}
+.video-container iframe{
+  width: 100%;
+  aspect-ratio: 16 / 9;
 }
