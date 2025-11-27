@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inicio de sesión | Kine UCN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --primary:#ff6a00;
+      --primary-600:#e65f00;
+      --muted:#6b7280;
+      --bg:#f5f6f8;
+      --card:#ffffff;
+      --bd:#d9d9d9;
+
+      --ok-bg:#eaffea; --ok-bd:#b7e4b7; --ok-fg:#0c6b0c;
+      --err-bg:#ffecec; --err-bd:#ffb3b3; --err-fg:#b30000;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:#fff1e6;
+      display:grid;
+      place-items:center;
+      padding:32px 16px;
+    }
+    .card{
+      width:min(520px, 92vw);
+      background:var(--card);
+      border-radius:16px;
+      padding:28px 28px 32px;
+      box-shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+    .logo{display:flex;justify-content:center;margin-bottom:10px}
+    .logo img{height:64px;opacity:.95}
+    h1{margin:8px 0 4px;text-align:center;font-size:26px;letter-spacing:.3px}
+    .sub{margin:0 0 16px;text-align:center;color:var(--muted)}
+    label{display:block;font-weight:700;margin:12px 0 6px}
+    .input{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid var(--bd);
+      border-radius:10px;
+      background:#f8faff;
+      outline:0;
+      transition:border-color .18s, box-shadow .18s;
+    }
+    .input:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(255,106,0,.15);
+    }
+    .help{font-size:12px;color:var(--muted);margin-top:6px}
+    .btn{
+      width:100%;
+      margin-top:16px;
+      padding:12px 14px;
+      background:var(--primary);
+      border:none;border-radius:10px;
+      color:#fff;font-weight:700;font-size:15px;
+      cursor:pointer;transition:background .15s, transform .02s;
+    }
+    .btn:hover{background:var(--primary-600)}
+    .btn:active{transform:translateY(1px)}
+
+    .msg{padding:10px 14px;border-radius:10px;margin-top:12px;text-align:center}
+    .msg.success{background:var(--ok-bg);border:1px solid var(--ok-bd);color:var(--ok-fg)}
+    .msg.error{background:var(--err-bg);border:1px solid var(--err-bd);color:var(--err-fg)}
+  </style>
+</head>
+<body>
+
+  <main class="card">
+    <div class="logo">
+      <!-- Cambia la ruta si tu logo está en otra carpeta -->
+      <img src="{% static 'img/logoucn_medicina.png' %}" alt="Kine UCN">
+    </div>
+
+    <h1>Inicio de sesión</h1>
+    <p class="sub">Acceso exclusivo para <b>Docentes</b></p>
+
+    <form method="post" action="{% url 'login' %}" autocomplete="off" novalidate>
+      {% csrf_token %}
+
+      <label for="id_correo">Correo del docente</label>
+      <input id="id_correo" class="input" type="email" name="correo"
+             placeholder="nombre@alumnos.ucn.cl" required>
+      <div class="help">Debe coincidir con el correo registrado por el administrador.</div>
+
+      <label for="id_contrasena">Contraseña</label>
+      <input id="id_contrasena" class="input" type="password" name="contrasena"
+             placeholder="••••••••" required>
+      <div class="help">Respetar mayúsculas/minúsculas.</div>
+
+      <button class="btn" type="submit">Ingresar</button>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="msg {% if 'success' in message.tags %}success{% else %}error{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </form>
+  </main>
+
+</body>
+</html>
