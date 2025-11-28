@@ -1,0 +1,134 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Evaluar preguntas</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f3f4f6;
+      margin:0;
+    }
+
+    .container {
+      max-width:900px;
+      margin:30px auto;
+      background:#fff;
+      padding:24px;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-top:0;
+      font-size:24px;
+    }
+
+    p.desc {
+      color:#555;
+    }
+
+    ul {
+      list-style:none;
+      padding:0;
+      margin:16px 0;
+    }
+
+    li {
+      padding:8px 0;
+      border-bottom:1px solid #ddd;
+    }
+
+    input {
+      margin-right:8px;
+    }
+
+    button {
+      padding:10px 16px;
+      background:#2563eb;
+      color:white;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:15px;
+    }
+
+    button:hover {
+      background:#1d4ed8;
+    }
+
+    .resultado {
+      margin-top:20px;
+      padding:14px;
+      border-radius:8px;
+      background:#f0f9ff;
+    }
+
+    .subtitle {
+      margin:12px 0 6px;
+      font-weight:bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Evaluar tus respuestas</h1>
+
+    <p class="desc">
+      Selecciona las respuestas que consideres correctas y luego haz clic en
+      <strong>Evaluar</strong>.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <ul>
+        {% for p in preguntas %}
+          <li>
+            <label>
+              <input
+                type="checkbox"
+                name="preguntas_seleccionadas"
+                value="{{ p.id }}"
+                {% if p.id|stringformat:"s" in seleccionadas %}checked{% endif %}
+              >
+              {{ p.texto }}
+            </label>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <button type="submit">Evaluar</button>
+    </form>
+
+    {% if resultado %}
+      <div class="resultado">
+
+        <p><strong>Resultado:</strong> {{ resultado }}</p>
+
+        {% if faltantes %}
+          <p class="subtitle">Respuestas correctas que no seleccionaste:</p>
+          <ul>
+            {% for p in faltantes %}
+              <li>{{ p.texto }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if sobrantes %}
+          <p class="subtitle">Respuestas incorrectas que seleccionaste:</p>
+          <ul>
+            {% for p in sobrantes %}
+              <li>{{ p.texto }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+      </div>
+    {% endif %}
+
+  </div>
+</body>
+</html>

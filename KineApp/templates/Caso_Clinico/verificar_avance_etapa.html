@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  h1 { margin-top: 0; font-size: 24px; }
+  p.desc { color: #555; }
+  ul { list-style: none; padding: 0; margin: 16px 0; }
+  li { padding: 8px 0; border-bottom: 1px solid #ddd; }
+  button {
+    padding: 10px 16px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  button:hover { background: #1d4ed8; }
+  .mensaje { padding: 12px; border-radius: 6px; margin-top: 16px; }
+  .ok { background: #dcfce7; color: #166534; }
+  .bad { background: #fee2e2; color: #991b1b; }
+</style>
+
+<div class="container">
+  <h1>Verificar si puedes avanzar</h1>
+
+  <p class="desc">
+    Selecciona las respuestas correctas. Solo podrás avanzar si tu selección coincide
+    con todas las respuestas correctas definidas por el docente.
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+    <ul>
+      {% for p in preguntas %}
+        <li>
+          <input
+            type="checkbox"
+            name="preguntas_seleccionadas"
+            value="{{ p.id }}"
+            {% if p.id|stringformat:"s" in seleccionadas %}checked{% endif %}
+          >
+          {{ p.texto }}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <button type="submit">Evaluar avance</button>
+  </form>
+
+  {% if mensaje %}
+    <div class="mensaje {% if puede_avanzar %}ok{% else %}bad{% endif %}">
+      {{ mensaje }}
+    </div>
+  {% endif %}
+
+  {% if puede_avanzar %}
+    <form method="post" action="{% url 'siguiente_etapa' %}">
+      {% csrf_token %}
+      <button>Ir a la siguiente etapa</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

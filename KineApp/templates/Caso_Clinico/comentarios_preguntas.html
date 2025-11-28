@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Comentarios sobre respuestas</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f3f4f6;
+      margin:0;
+    }
+    .container {
+      max-width:900px;
+      margin:30px auto;
+      background:#fff;
+      padding:24px;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 { margin-top:0; font-size:24px; }
+    p.desc { color:#555; }
+    ul { list-style:none; padding:0; margin:16px 0; }
+    li { padding:8px 0; border-bottom:1px solid #ddd; }
+    .correcta { color:#16a34a; font-weight:bold; }
+    .incorrecta { color:#b91c1c; font-weight:bold; }
+    button {
+      padding:10px 16px;
+      background:#2563eb;
+      color:white;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:15px;
+    }
+    button:hover { background:#1d4ed8; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Comentarios sobre tu selección</h1>
+
+    <p class="desc">
+      Selecciona tus respuestas y presiona
+      <strong>Generar comentarios</strong>.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <ul>
+        {% for p in preguntas %}
+          <li>
+            <input
+              type="checkbox"
+              name="preguntas_seleccionadas"
+              value="{{ p.id }}"
+              {% if p.id|stringformat:"s" in seleccionadas %}checked{% endif %}
+            >
+            {{ p.texto }}
+          </li>
+        {% endfor %}
+      </ul>
+
+      <button type="submit">Generar comentarios</button>
+    </form>
+
+    {% if correctas_sel or incorrectas_sel %}
+      <h3>Resultados:</h3>
+
+      <ul>
+        {% for p in correctas_sel %}
+          <li class="correcta">✔ {{ p.texto }} (Correcta)</li>
+        {% endfor %}
+
+        {% for p in incorrectas_sel %}
+          <li class="incorrecta">✖ {{ p.texto }} (Incorrecta)</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+  </div>
+</body>
+</html>
