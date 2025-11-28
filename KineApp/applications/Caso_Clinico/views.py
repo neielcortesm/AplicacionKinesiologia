@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from .models import CasoClinico
 from applications.Etapa.models import Etapa
 
@@ -11,8 +12,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Inicio(TemplateView):
-    template_name = 'Caso_Clinico/inicio.html'
+
+class Inicio(LoginRequiredMixin, TemplateView):  # usa tu clase base real
+    template_name = "Caso_Clinico/inicio.html"
+    login_url = reverse_lazy('Aestudiante:login')   # a dónde manda si no está logueado
+    redirect_field_name = 'next'                   
 
 
 class ListAllCasos(ListView):

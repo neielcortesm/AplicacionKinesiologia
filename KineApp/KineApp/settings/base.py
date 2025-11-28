@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'applications.Examen',
     'applications.Etapa',
     'applications.Pregunta', 
+     'Aestudiante',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,13 @@ JAZZMIN_SETTINGS["icons"].update({
     "auth.Group": "fas fa-users-cog",    # Icono para Grupos
     "auth.User": "fas fa-user",          # Icono para Usuarios
 })
+
+LOGIN_URL = 'Aestudiante:login'
+LOGIN_REDIRECT_URL = 'Inicio'          # ← tu inicio real
+LOGOUT_REDIRECT_URL = 'Aestudiante:login'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'Aestudiante.auth_backends.EmailBackend',  # ← backend por correo
+]
+

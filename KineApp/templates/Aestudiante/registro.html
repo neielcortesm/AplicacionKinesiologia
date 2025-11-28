@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Registro Estudiante{% endblock %}
+{% block content %}
+
+<section class="py-5">
+  <div class="container" style="max-width: 720px;">
+    <div class="card shadow-sm border-0 rounded-4">
+      <div class="card-body p-4 p-md-5">
+        <h2 class="h3 mb-3 fw-bold text-center">Crear cuenta</h2>
+        <p class="text-secondary text-center mb-4">Completa tus datos para comenzar.</p>
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombres</label>
+              <input type="text" name="first_name" class="form-control form-control-lg" value="{{ form.first_name.value|default:'' }}">
+              {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Apellidos</label>
+              <input type="text" name="last_name" class="form-control form-control-lg" value="{{ form.last_name.value|default:'' }}">
+              {% if form.last_name.errors %}<div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Correo electrónico</label>
+              <input type="email" name="email" class="form-control form-control-lg" placeholder="tucorreo@ejemplo.com"
+                     value="{{ form.email.value|default:'' }}" required>
+              {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Contraseña</label>
+              <input type="password" name="password1" class="form-control form-control-lg" required>
+              {% if form.password1.errors %}<div class="text-danger small mt-1">{{ form.password1.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Repite la contraseña</label>
+              <input type="password" name="password2" class="form-control form-control-lg" required>
+              {% if form.password2.errors %}<div class="text-danger small mt-1">{{ form.password2.errors.0 }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button class="btn btn-success btn-lg rounded-3" type="submit">Crear cuenta</button>
+          </div>
+        </form>
+
+        <div class="text-center mt-4">
+          <span class="text-secondary">¿Ya tienes cuenta?</span>
+          <a href="{% url 'Aestudiante:login' %}" class="fw-semibold">Inicia sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
