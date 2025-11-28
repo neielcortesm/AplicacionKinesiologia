@@ -7,7 +7,7 @@ urlpatterns = [
     path('', views.Inicio.as_view(), name='Inicio'),
     path('list_all_casos/', views.ListAllCasos.as_view(), name='listAllCasos'),  
     path('list_casosByCategoria/', views.ListByCategoriaCasos.as_view(), name='listByCategoriaCasos'),
-    path('verCaso/<pk>', views.DetailCaso.as_view(), name='detalleCaso'),
+  #  path('verCaso/<pk>', views.DetailCaso.as_view(), name='detalleCaso'),
     path('video_caso/<int:pk>', views.VideoCaso.as_view(), name='videoCaso'),
     path('inicio/', login_required(views.Inicio.as_view(), login_url='Aestudiante:login'), name='Inicio'),
     path('list_casosByCategoria/', views.ListByCategoriaCasos.as_view(),
@@ -20,5 +20,7 @@ urlpatterns = [
     name="verificar_avance_etapa"),
     path("siguiente-etapa/", views.siguiente_etapa,
     name="siguiente_etapa"),
+    path('detalle/<int:pk>/', views.DetailCaso.as_view(), name='detalleCaso'),
+    path('inscribir/<int:pk>/', views.InscribirCasoView.as_view(), name='inscribirse_caso'),
 ]
 

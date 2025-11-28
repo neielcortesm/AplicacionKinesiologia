@@ -1,30 +1,84 @@
-
-
 {% extends 'base.html' %}
-{%load static %}
-{%block title %} Inicio {%endblock title %}
+{% load static %}
+{% block title %} Detalle Caso Clínico {% endblock title %}
 
+{% block content %}
 
-{%block content %}
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="text-center wow fadeIn" data-wow-delay="0.1s">
+            <h1 class="mb-5">Detalle del <span class="text-uppercase text-primary bg-light px-2">Caso Clínico</span></h1>
+        </div>
 
+        <div class="card shadow p-4">
 
-    <!-- Feature Start -->
-    <div class="container-fluid py-5">
-        <div class="container py-5">
-            <div class="text-center wow fadeIn" data-wow-delay="0.1s">
-                <h1 class="mb-5">Detalle <span class="text-uppercase text-primary bg-light px-2"> Caso </span>
-                </h1>
-            </div>
-            <div>
-                {{DetailCaso}}
-            </div>
+            <h3 class="mb-3">{{ caso.nombre }}</h3>
+
+            <p><strong>Descripción:</strong> {{ caso.descripción }}</p>
+
+            <p><strong>Categoría:</strong> {{ caso.categoria }}</p>
+
+            <p><strong>Puntaje Total:</strong> {{ caso.puntaje_total }}</p>
+
+            <hr>
+
+            <h4>Ficha del Paciente</h4>
+            {% if caso.paciente %}
+                <p><strong>Nombre:</strong> {{ caso.paciente.nombre }}</p>
+                <p><strong>Edad:</strong> {{ caso.paciente.edad }}</p>
+                <p><strong>RUT:</strong> {{ caso.paciente.rut }}</p>
+                <p><strong>fecha_nacimiento:</strong> {{ caso.paciente.fecha_nacimiento }}</p>
+                <p><strong>sexo:</strong> {{ caso.paciente.sexo }}</p>
+                <p><strong>direccion:</strong> {{ caso.paciente.direccion }}</p>
+                <p><strong>telefono:</strong> {{ caso.paciente.telefono }}</p>
+                <p><strong>prevision:</strong> {{ caso.paciente.prevision }}</p>
+                <p><strong>ocupacion:</strong> {{ caso.paciente.ocupacion }}</p>
+                <p><strong>habitos:</strong> {{ caso.paciente.habitos }}</p>
+            {% else %}
+                <p class="text-muted">Este caso no tiene un paciente asignado.</p>
+            {% endif %}
+
+            <hr>
+
+            <h4>Docente Asignado</h4>
+            {% if caso.docente %}
+                <p>{{ caso.docente }}</p>
+            {% else %}
+                <p class="text-muted">No hay docente asignado.</p>
+            {% endif %}
+
+            <hr>
+
+            {% if user.is_authenticated %}
+
+                {% if inscrito %}
+                    <p class="text-success"><strong>Ya estás inscrito en este caso.</strong></p>
+
+                {% else %}
+                    <h4 class="mt-4">Formulario de inscripción</h4>
+                    <form action="{% url 'inscribirse_caso' caso.id %}" method="post">
+                        {% csrf_token %}
+
+                        <label><strong>Motivo de inscripción</strong></label>
+                        <textarea name="motivo" class="form-control mb-3" required></textarea>
+
+                        <label><strong>Comentario</strong></label>
+                        <input type="text" name="comentario" class="form-control mb-3">
+
+                        <button class="btn btn-primary mt-3" type="submit">
+                            Inscribirse
+                        </button>
+                    </form>
+                {% endif %}
+
+            {% else %}
+                <p class="text-danger mt-3">Debes iniciar sesión para inscribirte.</p>
+            {% endif %}
+
+            <a href="{% url 'listAllCasos' %}" class="btn btn-secondary mt-4">Volver</a>
         </div>
     </div>
-    <!-- Feature End -->
+</div>
 
-
-
-
-{%endblock content %}
-
+{% endblock content %}
 

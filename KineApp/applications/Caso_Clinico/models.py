@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class CasoClinico(models.Model):
     nombre = models.CharField(max_length=200)
@@ -10,3 +11,20 @@ class CasoClinico(models.Model):
 
     def __str__(self):
         return f"{self.id} - {self.descripción} - {self.categoria}"
+    
+
+class InscripcionCaso(models.Model):
+    estudiante = models.ForeignKey(User, on_delete=models.CASCADE)
+    caso = models.ForeignKey(CasoClinico, on_delete=models.CASCADE)
+
+   
+    motivo = models.TextField(null=True, blank=True)
+    comentario = models.CharField(max_length=200, null=True, blank=True)
+
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('estudiante', 'caso')  
+
+    def __str__(self):
+        return f"{self.estudiante.username} inscrito en {self.caso.nombre}"

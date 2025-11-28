@@ -3,10 +3,15 @@ import re
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, View
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+# IMPORTANTE: importar bien los modelos
+from .models import CasoClinico, InscripcionCaso
+from applications.Categoria.models import Categoria
 from .models import CasoClinico               # ✅ SOLO CasoClinico aquí
 from applications.Pregunta.models import Pregunta  # ✅ Pregunta desde su app real
 from applications.Etapa.models import Etapa
@@ -23,11 +28,38 @@ class Inicio(LoginRequiredMixin, TemplateView):  # usa tu clase base real
     login_url = reverse_lazy('Aestudiante:login')   # a dónde manda si no está logueado
     redirect_field_name = 'next'
 
-
-class ListAllCasos(ListView):
-    template_name = 'Caso_Clinico/list_all_casos.html'
+class ListAllCasos(LoginRequiredMixin, ListView):
+    """
+    Lista TODOS los casos clínicos.
+    Incluye buscador por nombre del caso.
+    Tiene paginación.
+    """
+    template_name = "Caso_Clinico/list_all_casos.html"
     model = CasoClinico
-    context_object_name = 'ListAllCasos'
+    context_object_name = "ListAllCasos"
+    paginate_by = 10
+    login_url = "login"
+
+    def get_queryset(self):
+        # Base de datos optimizada con select_related
+        qs = CasoClinico.objects.select_related("categoria", "paciente").order_by("id")
+
+        # Búsqueda por nombre
+        q = self.request.GET.get("q")
+        if q:
+            qs = qs.filter(nombre__icontains=q)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # Mantiene el valor del buscador en pantalla
+        ctx["q"] = self.request.GET.get("q", "")
+        return ctx
+#class ListAllCasos(ListView):
+ #   template_name = 'Caso_Clinico/list_all_casos.html'
+  #  model = CasoClinico
+   # context_object_name = 'ListAllCasos'
 
     # Si quieres filtrar por palabra clave, descomenta y ajusta:
     # def get_queryset(self):
@@ -44,12 +76,74 @@ class ListByCategoriaCasos(ListView):
     # Ajusta la categoría aquí si necesitas que sea dinámica
     queryset = CasoClinico.objects.filter(categoria__nombre='muscular')
 
-
-class DetailCaso(DetailView):
-    template_name = 'Caso_Clinico/detalle_caso.html'
+# ============================================================
+#                    DETALLE DEL CASO
+# ============================================================
+class DetailCaso(LoginRequiredMixin, DetailView):
+    """
+    Vista detalle del caso clínico.
+    Además muestra si el usuario YA está inscrito.
+    """
+    template_name = "Caso_Clinico/detalle_caso.html"
     model = CasoClinico
-    context_object_name = 'DetailCaso'
+    context_object_name = "caso"
+    login_url = "login"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        caso = self.get_object()
+
+        # Verificar si el usuario ya está inscrito en este caso
+        context["inscrito"] = InscripcionCaso.objects.filter(
+            estudiante=self.request.user,
+            caso=caso
+        ).exists()
+
+        return context
+
+
+
+# ============================================================
+#                    INSCRIPCIÓN A CASO
+# ============================================================
+class InscribirCasoView(View):
+    """
+    Procesa la inscripción de un estudiante a un caso clínico.
+    Recibe el formulario desde POST.
+    """
+    def post(self, request, pk):
+
+        # 1. Usuario no logueado
+        if not request.user.is_authenticated:
+            messages.error(request, "Debes iniciar sesión para inscribirte.")
+            return redirect("detalleCaso", pk=pk)
+
+        # 2. Obtener el caso
+        caso = CasoClinico.objects.get(pk=pk)
+
+        # 3. Evitar inscripciones duplicadas
+        if InscripcionCaso.objects.filter(
+            estudiante=request.user,
+            caso=caso
+        ).exists():
+            messages.warning(request, "Ya estás inscrito en este caso.")
+            return redirect("detalleCaso", pk=pk)
+
+        # 4. Datos del formulario
+        motivo = request.POST.get("motivo")
+        comentario = request.POST.get("comentario")
+
+        # 5. Crear inscripción
+        InscripcionCaso.objects.create(
+            estudiante=request.user,
+            caso=caso,
+            motivo=motivo,
+            comentario=comentario
+        )
+
+        # 6. Confirmación
+        messages.success(request, "Inscripción realizada con éxito.")
+        return redirect("detalleCaso", pk=pk)
 
 # =========================
 #   UTILIDADES
