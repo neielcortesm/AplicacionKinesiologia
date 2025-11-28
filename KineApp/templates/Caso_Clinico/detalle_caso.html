@@ -38,42 +38,7 @@
                 <p class="text-muted">Este caso no tiene un paciente asignado.</p>
             {% endif %}
 
-            <hr>
-
-            <h4>Docente Asignado</h4>
-            {% if caso.docente %}
-                <p>{{ caso.docente }}</p>
-            {% else %}
-                <p class="text-muted">No hay docente asignado.</p>
-            {% endif %}
-
-            <hr>
-
-            {% if user.is_authenticated %}
-
-                {% if inscrito %}
-                    <p class="text-success"><strong>Ya estás inscrito en este caso.</strong></p>
-
-                {% else %}
-                    <h4 class="mt-4">Formulario de inscripción</h4>
-                    <form action="{% url 'inscribirse_caso' caso.id %}" method="post">
-                        {% csrf_token %}
-
-                        <label><strong>Motivo de inscripción</strong></label>
-                        <textarea name="motivo" class="form-control mb-3" required></textarea>
-
-                        <label><strong>Comentario</strong></label>
-                        <input type="text" name="comentario" class="form-control mb-3">
-
-                        <button class="btn btn-primary mt-3" type="submit">
-                            Inscribirse
-                        </button>
-                    </form>
-                {% endif %}
-
-            {% else %}
-                <p class="text-danger mt-3">Debes iniciar sesión para inscribirte.</p>
-            {% endif %}
+            
 
             <a href="{% url 'listAllCasos' %}" class="btn btn-secondary mt-4">Volver</a>
         </div>
