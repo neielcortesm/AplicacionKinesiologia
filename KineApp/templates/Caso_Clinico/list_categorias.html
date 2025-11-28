@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Categorías{% endblock %}
+
+{% block hero_title %}Categorías{% endblock %}
+{% block hero_breadcrumb %}
+<li class="breadcrumb-item"><a class="text-primary" href="{% url 'caso_clinico:home' %}">Hogar</a></li>
+<li class="breadcrumb-item text-secondary active" aria-current="page">Categorías</li>
+{% endblock %}
+
+{% block content %}
+
+<section class="py-4">
+  <div class="container">
+    <div class="row g-3">
+
+      {% for c in categorias %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ c.nombre }}</h5>
+
+            {% if c.descripcion %}
+              <p class="card-text text-muted">{{ c.descripcion|truncatechars:120 }}</p>
+            {% endif %}
+
+            <a class="btn btn-outline-primary" href="{% url 'caso_clinico:casos_by_categoria' c.id %}">
+              Ver casos
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center text-muted py-5">No hay categorías registradas.</p>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
