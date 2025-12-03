@@ -6,17 +6,20 @@ from applications.Caso_Clinico.models import CasoClinico
 #preguntas
 #subcategorias
     #sintomas, #actividades recreativas, ##ocupacion, trabajo
-class Etapa(models.Model):
-    ETAPAS = [
-        ('entrevista_clinica', 'Entrevista Clínica (Amnesis)'),
-        ('examen_fisico', 'Exámen Físico'),
-        ('examen_final', 'Exámen Final'),
+from applications.Etapa.models import Etapa
+# Create your models here.
+class Pregunta(models.Model):
+    CATEGORIAS = [
+        ('sintoma', 'Síntoma'),
+        ('trabajo', 'Trabajo'),
+        ('actividades', 'Actividades'),
     ]
-    nombre = models.CharField(max_length=30, choices=ETAPAS, unique=True)
-    descripcion = models.TextField('Descripción Etapa', null=True, max_length=200)
-    video_url = models.URLField('Video', null=True, help_text="Ingresa el enlace del video de Youtube.")
-    caso = models.ForeignKey(CasoClinico, on_delete=models.CASCADE, related_name='etapas')
-
+    texto = models.TextField()
+    subcategoria = models.CharField(max_length=20, choices=CATEGORIAS)
+    etapa = models.ForeignKey(Etapa, on_delete=models.CASCADE,
+    related_name='preguntas')
+    es_correcta = models.BooleanField(default=False)
     def __str__(self):
-        return dict(self.ETAPAS).get(self.nombre, 'Desconocido')
+        return self.texto
+
     
