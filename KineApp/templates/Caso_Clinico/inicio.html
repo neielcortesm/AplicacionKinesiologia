@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
-{%load static %}
-{%block title %} Inicio {%endblock title %}
+{% load static %}
+{% block title %} Inicio {% endblock title %}
 
-{%block content %}
+{% block content %}
 <!-- Hero Start -->
-    <div class="container-fluid pb-5 bg-primary hero-header">
-        <div class="container py-5">
-            <div class="row g-3 align-items-center">
-                <div class="col-lg-6 text-center text-lg-start">
-                    <h1 class="display-1 mb-0 animated slideInLeft">Inicio</h1>
-                </div>
-                
+<div class="container-fluid pb-5 mb-5 bg-primary hero-header">
+    <div class="container py-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="display-1 mb-0 animated slideInLeft">Inicio</h1>
             </div>
         </div>
     </div>
-    <!-- Hero End -->
+</div>
+<!-- Hero End -->
+
 <!-- Hero / Intro -->
-<div class="container-fluid py-5">
-    <div class="container py-5">
+<div class="container-fluid py-3">   <!-- 🔥 antes py-5 -->
+    <div class="container py-3">    <!-- 🔥 antes py-5 -->
         <div class="row align-items-center">
             <div class="col-lg-7">
                 <h1 class="display-4 mb-4">¿Qué es?</h1>
@@ -29,7 +29,6 @@
                     Explora casos clínicos interactivos, organiza tus categorías y revisa tu progreso desde tu cuenta personal.
                 </p>
                 <a href="{% url 'listAllCasos' %}" class="btn btn-primary me-2">Ver casos clínicos</a>
-                <a href="" class="btn btn-outline-primary">Ingresar al sistema</a>
             </div>
             <div class="col-lg-5 position-relative">
                 <div class="header-image-wrapper">
@@ -41,15 +40,16 @@
 </div>
 
 <!-- Feature Start -->
-<div class="container-fluid py-5">
+<div class="container-fluid py-5 mb-5">
     <div class="container py-5">
-        <div class="text-center wow fadeIn" data-wow-delay="0.1s">
+        <div class="text-center wow fadeIn mt-5" data-wow-delay="0.1s">
             <h2 class="mb-5">Explora las principales secciones</h2>
         </div>
-        <div class="row g-5 align-items-center text-center">
 
+        <div class="row g-5 align-items-center text-center justify-content-center">
+            
             <!-- Casos clínicos -->
-            <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.1s">
+            <div class="col-md-5 col-lg-4 wow fadeIn" data-wow-delay="0.1s">
                 <i class="fa fa-notes-medical fa-4x text-primary mb-4"></i>
                 <h4>Casos clínicos</h4>
                 <p class="mb-3">
@@ -59,7 +59,7 @@
             </div>
 
             <!-- Categorías -->
-            <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
+            <div class="col-md-5 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
                 <i class="fa fa-layer-group fa-4x text-primary mb-4"></i>
                 <h4>Categorías</h4>
                 <p class="mb-3">
@@ -68,19 +68,8 @@
                 <a href="{% url 'listByCategoriaCasos' %}" class="btn btn-link">Ver categorías</a>
             </div>
 
-            <!-- Mi cuenta -->
-            <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.5s">
-                <i class="fa fa-user-circle fa-4x text-primary mb-4"></i>
-                <h4>Mi cuenta</h4>
-                <p class="mb-3">
-                    Revisa tu historial de casos, tu avance y la retroalimentación de los docentes en un solo lugar.
-                </p>
-                <a href="" class="btn btn-link">Ir a mi cuenta</a>
-            </div>
-
         </div>
     </div>
 </div>
 
-
-{%endblock content %}
+{% endblock content %}
