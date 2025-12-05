@@ -13,22 +13,31 @@
                 <div class="col-lg-6 animated slideInRight">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center justify-content-lg-end mb-0">
-                            <li class="breadcrumb-item"><a class="text-primary" href="#!">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-primary" href="#!">Pages</a></li>
-                            <li class="breadcrumb-item text-secondary active" aria-current="page">About</li>
+                            <li class="breadcrumb-item"><a class="text-primary" href="#!">Inicio</a></li>
+                            <li class="breadcrumb-item"><a class="text-primary" href="#!">Ficha Paciente</a></li>
+                            <li class="breadcrumb-item text-secondary active" aria-current="page">Amnesis</li>
                         </ol>
                     </nav>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Hero End -->
-{% if video_id %}
+
+<h1>{{ video.titulo }}</h1>
+
 <div class="video-container">
-  <iframe src="https://www.youtube.com/embed/{{ video_id }}"
-          allowfullscreen></iframe>
+    {% if video.embed_url %}
+    <iframe
+        width="900" height="506"
+        src="{{ video.embed_url }}"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
+    {% else %}
+        <p>No se pudo cargar el video. Revisa la URL en la etapa.</p>
+    {% endif %}
 </div>
-{% else %}
-  <p>No hay video disponible.</p>
-{% endif %}
-{%endblock content %}
+{% endblock %}

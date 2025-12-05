@@ -6,7 +6,7 @@ from applications.Categoria.models import Categoria
 
 
 # Create your views here.
-class List_categotias(LoginRequiredMixin, ListView):
+class List_categorias(LoginRequiredMixin, ListView):
     template_name = "Caso_Clinico/list_categorias.html"   # <- plantilla correcta
     model = Categoria
     context_object_name = "categorias"

@@ -3,15 +3,18 @@
 
 {% block title %}Casos Clínicos{% endblock %}
 
-{# Hero del layout principal #}
-{% block hero_title %}Casos Clínicos{% endblock %}
-{% block hero_breadcrumb %}
-  <li class="breadcrumb-item"><a class="text-primary" href="{% url 'Inicio' %}">Hogar</a></li>
-  <li class="breadcrumb-item text-secondary active" aria-current="page">Casos Clínicos</li>
-{% endblock %}
-
 {% block content %}
-
+<!-- Hero Start -->
+<div class="container-fluid pb-5 mb-5 bg-primary hero-header">
+    <div class="container py-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="hero-title mb-0 animated slideInLeft">Casos</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
 <!-- Barra de búsqueda -->
 <section class="py-4">
   <div class="container">

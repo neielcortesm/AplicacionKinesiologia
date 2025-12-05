@@ -199,24 +199,27 @@ def get_video_id(url: str):
 # =========================
 class VideoCaso(TemplateView):
     template_name = 'Caso_Clinico/video_caso.html'
-    # model/context_object_name no son necesarios en TemplateView, pero no molestan
-    model = CasoClinico
-    context_object_name = 'VideoCaso'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Obtén la Etapa por PK desde la URL
         etapa = get_object_or_404(Etapa, pk=self.kwargs['pk'])
         context['etapa'] = etapa
 
-        # Extrae el ID del video
         video_id = get_video_id(etapa.video_url)
         context['video_id'] = video_id
 
-        # Logs útiles para depurar en consola
-        logger.info("URL recibida de etapa (%s): %s", etapa.pk, etapa.video_url)
-        logger.info("VIDEO ID extraído: %s", video_id)
+        # ⚠️ si no hay video_id, evita romper el template
+        if video_id:
+            embed_url = f"https://www.youtube.com/embed/{video_id}"
+        else:
+            embed_url = None
+
+        # objeto "video" que pide la profe
+        context['video'] = {
+            "titulo": etapa.nombre,      # o el campo que uses como título
+            "embed_url": embed_url,
+        }
 
         return context
 

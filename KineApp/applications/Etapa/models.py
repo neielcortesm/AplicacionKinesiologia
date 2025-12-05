@@ -8,7 +8,7 @@ from applications.Caso_Clinico.models import CasoClinico
     #sintomas, #actividades recreativas, ##ocupacion, trabajo
 class Etapa(models.Model):
     ETAPAS = [
-        ('entrevista_clinica', 'Entrevista Clínica (Amnesis)'),
+        ('Amnesis', 'Entrevista Clínica (Amnesis)'),
         ('examen_fisico', 'Exámen Físico'),
         ('examen_final', 'Exámen Final'),
     ]
