@@ -8,13 +8,11 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-# IMPORTANTE: importar bien los modelos
+from applications.Pregunta.models import Pregunta
+from applications.Etapa.models import Etapa
 from .models import CasoClinico, InscripcionCaso
 from applications.Categoria.models import Categoria
-from .models import CasoClinico               # ✅ SOLO CasoClinico aquí
-from applications.Pregunta.models import Pregunta  # ✅ Pregunta desde su app real
-from applications.Etapa.models import Etapa
+
 
 logger = logging.getLogger(__name__)
 
@@ -197,6 +195,7 @@ def get_video_id(url: str):
 # =========================
 #   VISTA DE VIDEO
 # =========================
+
 class VideoCaso(TemplateView):
     template_name = 'Caso_Clinico/video_caso.html'
 
@@ -207,22 +206,72 @@ class VideoCaso(TemplateView):
         context['etapa'] = etapa
 
         video_id = get_video_id(etapa.video_url)
-        context['video_id'] = video_id
-
-        # ⚠️ si no hay video_id, evita romper el template
         if video_id:
             embed_url = f"https://www.youtube.com/embed/{video_id}"
         else:
             embed_url = None
-
-        # objeto "video" que pide la profe
         context['video'] = {
-            "titulo": etapa.nombre,      # o el campo que uses como título
+            "titulo": etapa.nombre,
             "embed_url": embed_url,
         }
 
+        # subcategorías disponibles (las de tu modelo Pregunta)
+        context['subcategorias'] = Pregunta.CATEGORIAS  # [('sintoma','Síntoma'),...]
+
+        # si viene ?subcategoria=... en la URL, cargamos las preguntas
+        subcat = self.request.GET.get('subcategoria')
+        if subcat:
+            preguntas = Pregunta.objects.filter(
+                etapa=etapa,
+                subcategoria=subcat
+            ).order_by('id')  # opcional
+            labels = dict(Pregunta.CATEGORIAS)
+            context['preguntas'] = preguntas
+            context['subcategoria_key'] = subcat
+            context['subcategoria_nombre'] = labels.get(subcat, subcat)
+
         return context
 
+    def post(self, request, *args, **kwargs):
+        """Guardar o procesar las preguntas seleccionadas de la subcategoría."""
+        etapa = get_object_or_404(Etapa, pk=kwargs['pk'])
+        subcat = request.GET.get('subcategoria')
+
+        seleccionadas = request.POST.getlist('preguntas')
+        # ejemplo: guardarlas en sesión; luego puedes usarlas para evaluar
+        if subcat:
+            request.session[f"preguntas_{etapa.id}_{subcat}"] = seleccionadas
+        messages.success(request, "Preguntas seleccionadas correctamente.")
+
+        # recargar la misma página, manteniendo la subcategoría
+        return redirect(f"{request.path}?subcategoria={subcat}" if subcat else request.path)
+
+
+def preguntas_por_subcategoria_etapa(request, etapa_id, subcategoria_key):
+    etapa = get_object_or_404(Etapa, id=etapa_id)
+
+    preguntas = Pregunta.objects.filter(
+        etapa=etapa,
+        subcategoria=subcategoria_key
+    ).order_by('id')
+
+    labels = dict(Pregunta.CATEGORIAS)
+    subcategoria_nombre = labels.get(subcategoria_key, subcategoria_key)
+
+    if request.method == "POST":
+        seleccionadas = request.POST.getlist('preguntas')
+        # Ejemplo: guardarlas en sesión; luego puedes usarlas para evaluar
+        request.session[f"preguntas_{etapa.id}_{subcategoria_key}"] = seleccionadas
+        messages.success(request, "Preguntas seleccionadas correctamente.")
+        return redirect('video_caso', pk=etapa.id)
+
+    context = {
+        'etapa': etapa,
+        'preguntas': preguntas,
+        'subcategoria_key': subcategoria_key,
+        'subcategoria_nombre': subcategoria_nombre,
+    }
+    return render(request, 'Caso_Clinico/preguntas_subcategoria_etapa.html', context)
 
 # =========================
 #   EVALUACIONES

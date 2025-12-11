@@ -4,6 +4,18 @@
 
 {% block content %}
 
+<!-- Hero Start -->
+<div class="container-fluid pb-5 mb-5 bg-primary hero-header">
+    <div class="container py-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="hero-title mb-0 animated slideInLeft">Detalle</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
 <div class="container-fluid py-5">
     <div class="container py-5">
         <div class="text-center wow fadeIn" data-wow-delay="0.1s">
@@ -38,9 +50,23 @@
                 <p class="text-muted">Este caso no tiene un paciente asignado.</p>
             {% endif %}
 
-            
+            {% with primera_etapa=caso.etapas.first %}
+                {% if primera_etapa %}
+                    <a href="{% url 'video_caso' pk=primera_etapa.pk %}"
+                        class="btn btn-start-caso-square">
+                        Ingresar al caso
+                    </a>
+                {% else %}
+                    <p class="text-muted mt-3">
+                        Este caso aún no tiene etapas creadas.
+                    </p>
+                {% endif %}
+            {% endwith %}
 
-            <a href="{% url 'listAllCasos' %}" class="btn btn-secondary mt-4">Volver</a>
+
+
+            <a href="{% url 'listAllCasos' %}" class="btn btn-primary mt-4">Volver</a>
+
         </div>
     </div>
 </div>

@@ -54,43 +54,50 @@
 </section>
 
 
-<!-- Tabla de casos -->
+<!-- Mosaico de casos -->
 <section class="py-4">
   <div class="container">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-light">
-          <tr>
-            <th>Nombre Caso</th>
-            <th>Categoría</th>
-            <th>Paciente</th>
-            <th>Puntaje Total</th>
-            <th class="text-end">Acción</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for i in ListAllCasos %}
-            <tr>
-              <td class="fw-semibold">{{ i.nombre }}</td>
-              <td>{{ i.categoria.nombre|default:i.categoria }}</td>
-              <td>{{ i.paciente|default:"—" }}</td>
-              <td>{{ i.puntaje_total|default:"—" }}</td>
-              <td class="text-end">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {% for i in ListAllCasos %}
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title mb-2">{{ i.nombre }}</h5>
+              <p class="card-text mb-1">
+                <strong>Categoría:</strong> {{ i.categoria.nombre|default:i.categoria }}
+              </p>
+              <p class="card-text mb-1">
+                <strong>Descripción:</strong> {{ i.descripción|default:"—" }}
+              </p>
+              <p class="card-text mb-3">
+                <strong>Puntaje total:</strong> {{ i.puntaje_total|default:"—" }}
+              </p>
+              <div class="mt-auto text-end">
                 <a href="{% url 'detalleCaso' i.pk %}" class="btn btn-outline-dark btn-sm">
-                  🔍
+                  Ver detalle
                 </a>
-              </td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="5" class="text-center py-4">No se encontraron casos.</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-
-      </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col">
+          <div class="alert alert-info w-100 text-center">
+            No se encontraron casos.
+          </div>
+        </div>
+      {% endfor %}
     </div>
+
+    {# deja tu paginación igual que estaba #}
+    {% if is_paginated %}
+      <nav aria-label="Paginación" class="mt-3">
+        ...
+      </nav>
+    {% endif %}
+  </div>
+</section>
+
 
 
     {% if is_paginated %}

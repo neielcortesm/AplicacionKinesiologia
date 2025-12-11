@@ -1,43 +1,82 @@
 {% extends 'base.html' %}
-{%load static %}
-{%block title %} Caso 1 {%endblock title %}
+{% load static %}
 
-{%block content %}
-<!-- Hero Start -->
-    <div class="container-fluid pb-5 bg-primary hero-header">
-        <div class="container py-5">
-            <div class="row g-3 align-items-center">
-                <div class="col-lg-6 text-center text-lg-start">
-                    <h1 class="display-1 mb-0 animated slideInLeft">Caso Clinico</h1>
-                </div>
-                <div class="col-lg-6 animated slideInRight">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center justify-content-lg-end mb-0">
-                            <li class="breadcrumb-item"><a class="text-primary" href="#!">Inicio</a></li>
-                            <li class="breadcrumb-item"><a class="text-primary" href="#!">Ficha Paciente</a></li>
-                            <li class="breadcrumb-item text-secondary active" aria-current="page">Amnesis</li>
-                        </ol>
-                    </nav>
-                </div>
+{% block title %}{{ etapa.caso.nombre }} - {{ etapa }}{% endblock title %}
+
+{% block content %}
+<div class="container-fluid pb-5 bg-primary hero-header">
+    <div class="container py-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="hero-title mb-0 animated slideInLeft">Caso Clínico</h1>
             </div>
         </div>
     </div>
+</div>
 
-<h1>{{ video.titulo }}</h1>
+<div class="text-center mt-4">
+    <h1 class="mb-4">{{ video.titulo }}</h1>
+</div>
 
 <div class="video-container">
     {% if video.embed_url %}
-    <iframe
-        width="900" height="506"
-        src="{{ video.embed_url }}"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-    </iframe>
+        <iframe width="560" height="315"
+                src="{{ video.embed_url }}"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+        </iframe>
     {% else %}
         <p>No se pudo cargar el video. Revisa la URL en la etapa.</p>
+    {% endif %}
+</div>
+
+
+<div class="container mt-4">
+    <h2>Subcategorías de preguntas</h2>
+    <div class="row">
+        {% for key, nombre in subcategorias %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 text-center">
+                <img
+                    src="{% static 'img/subcats/' %}{{ key }}.jpg"
+                    class="card-img-top"
+                    style="max-height: 180px; width: 100%; object-fit: contain; padding: 1rem;"
+                    alt="{{ nombre }}">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">{{ nombre }}</h4>
+                    <a href="{% url 'video_caso' etapa.id %}?subcategoria={{ key }}"
+                       class="btn btn-primary">
+                        Ver preguntas
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if preguntas %}
+    <hr class="mt-4">
+    <h3>Preguntas: {{ subcategoria_nombre }}</h3>
+
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="list-group mb-3">
+            {% for p in preguntas %}
+            <label class="list-group-item">
+                <input type="checkbox"
+                       name="preguntas"
+                       value="{{ p.id }}"
+                       class="form-check-input me-1">
+                {{ p.texto }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar selección</button>
+    </form>
     {% endif %}
 </div>
 {% endblock %}

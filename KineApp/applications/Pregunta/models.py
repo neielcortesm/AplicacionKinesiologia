@@ -10,7 +10,7 @@ from applications.Etapa.models import Etapa
 # Create your models here.
 class Pregunta(models.Model):
     CATEGORIAS = [
-        ('sintoma', 'Síntoma'),
+        ('sintomas', 'Síntomas'),
         ('trabajo', 'Trabajo'),
         ('actividades', 'Actividades'),
     ]
