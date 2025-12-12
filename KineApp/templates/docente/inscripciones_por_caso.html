@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Inscripciones a casos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Inscripciones a casos clínicos</h1>
+
+  <!-- Filtro por caso -->
+  <form method="get" class="row g-2 my-3">
+    <div class="col-9 col-md-10">
+      <select name="caso" class="form-select">
+        <option value="">Todos los casos</option>
+        {% for c in casos %}
+          <option value="{{ c.id }}" {% if caso_seleccionado == c.id %}selected{% endif %}>
+            {{ c.nombre }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-3 col-md-2 d-grid">
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+    </div>
+  </form>
+
+  <table class="table table-striped mt-3">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Estudiante</th>
+        <th>Correo</th>
+        <th>Caso</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ins in inscripciones %}
+      <tr>
+        <td>{{ ins.fecha|date:"d/m/Y H:i" }}</td>
+        <td>{{ ins.estudiante.get_full_name|default:ins.estudiante.username }}</td>
+        <td>{{ ins.estudiante.email }}</td>
+        <td>{{ ins.caso.nombre }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">No hay inscripciones para este filtro.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
