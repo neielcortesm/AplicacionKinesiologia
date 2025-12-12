@@ -9,16 +9,14 @@ from django.views.generic import TemplateView, ListView, DetailView, View
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from applications.Pregunta.models import Pregunta
-from applications.Etapa.models import Etapa
 from .models import CasoClinico, InscripcionCaso
 from applications.Categoria.models import Categoria
-
-
-logger = logging.getLogger(__name__)
+from applications.Caso_Clinico.models import CasoClinico
 
 
 
 # =========================
+
 #   VISTAS PRINCIPALES
 # =========================
 class Inicio(LoginRequiredMixin, TemplateView):  # usa tu clase base real
@@ -195,36 +193,27 @@ def get_video_id(url: str):
 # =========================
 #   VISTA DE VIDEO
 # =========================
-
-class VideoCaso(TemplateView):
-    template_name = 'Caso_Clinico/video_caso.html'
+class EtapaInicialView(TemplateView):
+    template_name = 'Caso_Clinico/etapa_inicial.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        caso = get_object_or_404(CasoClinico, pk=self.kwargs['pk'])
+        context['caso'] = caso
 
-        etapa = get_object_or_404(Etapa, pk=self.kwargs['pk'])
-        context['etapa'] = etapa
+        video_id_motivo = get_video_id(caso.video_motivo) if caso.video_motivo else None
+        embed_motivo = f"https://www.youtube.com/embed/{video_id_motivo}" if video_id_motivo else None
+        context['video_motivo'] = embed_motivo
 
-        video_id = get_video_id(etapa.video_url)
-        if video_id:
-            embed_url = f"https://www.youtube.com/embed/{video_id}"
-        else:
-            embed_url = None
-        context['video'] = {
-            "titulo": etapa.nombre,
-            "embed_url": embed_url,
-        }
+        context['subcategorias'] = Pregunta.CATEGORIAS
 
-        # subcategorías disponibles (las de tu modelo Pregunta)
-        context['subcategorias'] = Pregunta.CATEGORIAS  # [('sintoma','Síntoma'),...]
-
-        # si viene ?subcategoria=... en la URL, cargamos las preguntas
         subcat = self.request.GET.get('subcategoria')
         if subcat:
             preguntas = Pregunta.objects.filter(
-                etapa=etapa,
+                caso=caso,
+                etapa='amnesis',
                 subcategoria=subcat
-            ).order_by('id')  # opcional
+            ).order_by('id')
             labels = dict(Pregunta.CATEGORIAS)
             context['preguntas'] = preguntas
             context['subcategoria_key'] = subcat
@@ -233,148 +222,55 @@ class VideoCaso(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        """Guardar o procesar las preguntas seleccionadas de la subcategoría."""
-        etapa = get_object_or_404(Etapa, pk=kwargs['pk'])
+        caso = get_object_or_404(CasoClinico, pk=kwargs['pk'])
         subcat = request.GET.get('subcategoria')
 
-        seleccionadas = request.POST.getlist('preguntas')
-        # ejemplo: guardarlas en sesión; luego puedes usarlas para evaluar
-        if subcat:
-            request.session[f"preguntas_{etapa.id}_{subcat}"] = seleccionadas
-        messages.success(request, "Preguntas seleccionadas correctamente.")
+        pregunta_id = request.POST.get('pregunta')  # solo una
+        if not pregunta_id:
+            messages.error(request, "Debes seleccionar una pregunta.")
+            return redirect(f"{request.path}?subcategoria={subcat}" if subcat else request.path)
 
-        # recargar la misma página, manteniendo la subcategoría
-        return redirect(f"{request.path}?subcategoria={subcat}" if subcat else request.path)
+        pregunta = get_object_or_404(
+            Pregunta,
+            id=pregunta_id,
+            caso=caso,
+            etapa='amnesis',
+            subcategoria=subcat
+        )
+
+        if pregunta.es_correcta and pregunta.video_respuesta:
+            # redirigir a la página de respuesta
+            return redirect('respuesta_pregunta',
+                            caso_id=caso.id,
+                            pregunta_id=pregunta.id,
+                            subcategoria_key=subcat)
+        else:
+            messages.error(request, "La pregunta seleccionada no es pertinente. ¡Intentalo de nuevo!")
+            return redirect(f"{request.path}?subcategoria={subcat}" if subcat else request.path)
 
 
-def preguntas_por_subcategoria_etapa(request, etapa_id, subcategoria_key):
-    etapa = get_object_or_404(Etapa, id=etapa_id)
+def respuesta_pregunta(request, caso_id, pregunta_id, subcategoria_key):
+    caso = get_object_or_404(CasoClinico, id=caso_id)
+    pregunta = get_object_or_404(Pregunta, id=pregunta_id, caso=caso)
 
-    preguntas = Pregunta.objects.filter(
-        etapa=etapa,
+    video_id = get_video_id(pregunta.video_respuesta) if pregunta.video_respuesta else None
+    embed_url = f"https://www.youtube.com/embed/{video_id}" if video_id else None
+
+    preguntas_misma_subcat = Pregunta.objects.filter(
+        caso=caso,
+        etapa='amnesis',
         subcategoria=subcategoria_key
     ).order_by('id')
 
     labels = dict(Pregunta.CATEGORIAS)
     subcategoria_nombre = labels.get(subcategoria_key, subcategoria_key)
 
-    if request.method == "POST":
-        seleccionadas = request.POST.getlist('preguntas')
-        # Ejemplo: guardarlas en sesión; luego puedes usarlas para evaluar
-        request.session[f"preguntas_{etapa.id}_{subcategoria_key}"] = seleccionadas
-        messages.success(request, "Preguntas seleccionadas correctamente.")
-        return redirect('video_caso', pk=etapa.id)
-
     context = {
-        'etapa': etapa,
-        'preguntas': preguntas,
+        'caso': caso,
+        'pregunta': pregunta,
+        'video_respuesta': embed_url,
+        'preguntas': preguntas_misma_subcat,
         'subcategoria_key': subcategoria_key,
         'subcategoria_nombre': subcategoria_nombre,
     }
-    return render(request, 'Caso_Clinico/preguntas_subcategoria_etapa.html', context)
-
-# =========================
-#   EVALUACIONES
-# =========================
-def evaluar_preguntas(request):
-    preguntas = Pregunta.objects.all().order_by("id")
-    resultado = None
-    seleccionadas = []
-    faltantes = []
-    sobrantes = []
-
-    if request.method == "POST":
-        seleccionadas = request.POST.getlist("preguntas_seleccionadas")
-        seleccionadas_ids = [int(i) for i in seleccionadas]
-
-        correctas_ids = list(
-            Pregunta.objects.filter(es_correcta=True).values_list("id", flat=True)
-        )
-
-        set_sel = set(seleccionadas_ids)
-        set_cor = set(correctas_ids)
-
-        faltantes_ids = set_cor - set_sel
-        sobrantes_ids = set_sel - set_cor
-
-        if set_sel == set_cor and len(set_cor) > 0:
-            resultado = "✅ Tu selección coincide con las respuestas correctas."
-        else:
-            resultado = "⚠️ Tu selección aún no coincide con todas las respuestas correctas."
-
-        faltantes = Pregunta.objects.filter(id__in=faltantes_ids)
-        sobrantes = Pregunta.objects.filter(id__in=sobrantes_ids)
-
-    context = {
-        "preguntas": preguntas,
-        "resultado": resultado,
-        "faltantes": faltantes,
-        "sobrantes": sobrantes,
-        "seleccionadas": seleccionadas,
-    }
-    return render(request, "Caso_Clinico/evaluar_preguntas.html", context)
-
-
-def comentarios_preguntas(request):
-    preguntas = Pregunta.objects.all().order_by("id")
-
-    seleccionadas = []
-    correctas_sel = []
-    incorrectas_sel = []
-
-    if request.method == "POST":
-        seleccionadas = request.POST.getlist("preguntas_seleccionadas")
-        seleccionadas_ids = [int(i) for i in seleccionadas]
-
-        correctas_ids = list(
-            Pregunta.objects.filter(es_correcta=True).values_list("id", flat=True)
-        )
-
-        ids_correctas_sel = set(seleccionadas_ids) & set(correctas_ids)
-        ids_incorrectas_sel = set(seleccionadas_ids) - set(correctas_ids)
-
-        correctas_sel = Pregunta.objects.filter(id__in=ids_correctas_sel)
-        incorrectas_sel = Pregunta.objects.filter(id__in=ids_incorrectas_sel)
-
-    context = {
-        "preguntas": preguntas,
-        "seleccionadas": seleccionadas,
-        "correctas_sel": correctas_sel,
-        "incorrectas_sel": incorrectas_sel,
-    }
-    return render(request, "Caso_Clinico/comentarios_preguntas.html", context)
-
-
-def verificar_avance_etapa(request):
-    # Solo permite avanzar si la selección es exactamente igual al conjunto de preguntas correctas
-    preguntas = Pregunta.objects.all().order_by("id")
-    seleccionadas = []
-    puede_avanzar = False
-    mensaje = None
-
-    if request.method == "POST":
-        seleccionadas = request.POST.getlist("preguntas_seleccionadas")
-        seleccionadas_ids = [int(i) for i in seleccionadas]
-
-        correctas_ids = list(
-            Pregunta.objects.filter(es_correcta=True).values_list("id", flat=True)
-        )
-
-        if set(seleccionadas_ids) == set(correctas_ids) and len(correctas_ids) > 0:
-            puede_avanzar = True
-            mensaje = "✅ Cumples los criterios. Puedes avanzar a la siguiente etapa."
-        else:
-            mensaje = "⛔ Aún no puedes avanzar. Debes seleccionar exactamente todas las respuestas correctas."
-
-    context = {
-        "preguntas": preguntas,
-        "seleccionadas": seleccionadas,
-        "puede_avanzar": puede_avanzar,
-        "mensaje": mensaje,
-    }
-    return render(request, "Caso_Clinico/verificar_avance_etapa.html", context)
-
-
-def siguiente_etapa(request):
-    # Pantalla simple de la etapa siguiente (puedes mejorarla después)
-    return render(request, "Caso_Clinico/siguiente_etapa.html")
+    return render(request, 'Caso_Clinico/respuesta_pregunta.html', context)
