@@ -24,7 +24,8 @@ class FichaPaciente(models.Model):
     prevision = models.CharField(max_length=20, choices=PREVISION_CHOICES, null=True, blank=True)
     ocupacion = models.CharField(max_length=100, null=True, blank=True)
     habitos = models.TextField(null=True, blank=True)
-   
+    imagen = models.ImageField(upload_to='img/', blank=True, null=True)  # Cambiado a 'img/'
+
 
     def __str__(self):
         return f"{self.nombre}"
