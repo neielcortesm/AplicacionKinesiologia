@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Respuesta - {{ caso.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'etapa_inicial' caso.id %}" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+    </div>
+
+    <p><strong>Pregunta:</strong> {{ pregunta.texto }}</p>
+    <h2>Respuesta del paciente</h2>
+
+    {% if video_respuesta %}
+    <div class="video-container text-center mb-4">
+        <iframe width="560" height="315"
+                src="{{ video_respuesta }}"
+                title="Respuesta del paciente"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+        </iframe>
+    </div>
+    {% else %}
+        <p>No se encontró video para esta pregunta.</p>
+    {% endif %}
+
+    <hr>
+    <h3>Preguntas de {{ subcategoria_nombre }}</h3>
+    <ul class="list-group mb-3">
+        {% for p in preguntas %}
+        <li class="list-group-item">{{ p.texto }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endblock %}
