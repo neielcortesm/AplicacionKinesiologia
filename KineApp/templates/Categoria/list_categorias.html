@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Categorías de casos{% endblock %}
+
+{% block content %}
+<div class="container-fluid pb-5 mb-5 bg-primary hero-header">
+    <div class="container py-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="hero-title mb-0 animated slideInLeft">Categorías</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+  <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+    {% for cat in categorias %}
+      <div class="col">
+        <div class="card h-100 text-center shadow-sm">
+          <!-- si tienes imagen por categoría -->
+          {% if cat.imagen %}
+            <img src="{{ cat.imagen.url }}" class="card-img-top" alt="{{ cat.nombre }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ cat.nombre }}</h5>
+            <p class="card-text">{{ cat.descripcion|default:"" }}</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No hay categorías cargadas.</p>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}
