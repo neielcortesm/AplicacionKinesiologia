@@ -61,6 +61,13 @@
       {% for i in ListAllCasos %}
         <div class="col">
           <div class="card h-100 shadow-sm">
+            
+            {% if i.paciente.imagen %}
+              <img src="{{ i.paciente.imagen.url }}"
+                   class="card-img-top caso-paciente-img"
+                   alt="Foto de {{ i.paciente.nombre }}">
+            {% endif %}
+
             <div class="card-body d-flex flex-column">
               <h5 class="card-title mb-2">{{ i.nombre }}</h5>
               <p class="card-text mb-1">
