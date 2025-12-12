@@ -35,33 +35,46 @@
             <hr>
 
             <h4>Ficha del Paciente</h4>
+
             {% if caso.paciente %}
-                <p><strong>Nombre:</strong> {{ caso.paciente.nombre }}</p>
-                <p><strong>Edad:</strong> {{ caso.paciente.edad }}</p>
-                <p><strong>RUT:</strong> {{ caso.paciente.rut }}</p>
-                <p><strong>fecha_nacimiento:</strong> {{ caso.paciente.fecha_nacimiento }}</p>
-                <p><strong>sexo:</strong> {{ caso.paciente.sexo }}</p>
-                <p><strong>direccion:</strong> {{ caso.paciente.direccion }}</p>
-                <p><strong>telefono:</strong> {{ caso.paciente.telefono }}</p>
-                <p><strong>prevision:</strong> {{ caso.paciente.prevision }}</p>
-                <p><strong>ocupacion:</strong> {{ caso.paciente.ocupacion }}</p>
-                <p><strong>habitos:</strong> {{ caso.paciente.habitos }}</p>
+            <div class="row">
+                <!-- Datos del paciente -->
+                <div class="col-md-8">
+                    <p><strong>Nombre:</strong> {{ caso.paciente.nombre }}</p>
+                    <p><strong>Edad:</strong> {{ caso.paciente.edad }}</p>
+                    <p><strong>RUT:</strong> {{ caso.paciente.rut }}</p>
+                    <p><strong>fecha_nacimiento:</strong> {{ caso.paciente.fecha_nacimiento }}</p>
+                    <p><strong>sexo:</strong> {{ caso.paciente.sexo }}</p>
+                    <p><strong>direccion:</strong> {{ caso.paciente.direccion }}</p>
+                    <p><strong>telefono:</strong> {{ caso.paciente.telefono }}</p>
+                    <p><strong>prevision:</strong> {{ caso.paciente.prevision }}</p>
+                    <p><strong>ocupacion:</strong> {{ caso.paciente.ocupacion }}</p>
+                    <p><strong>habitos:</strong> {{ caso.paciente.habitos }}</p>
+                </div>
+
+            <!-- Foto del paciente -->
+                <div class="col-md-4 text-md-end text-center">
+                    {% if caso.paciente.imagen %}
+                    <img src="{{ caso.paciente.imagen.url }}"
+                        alt="Foto de {{ caso.paciente.nombre }}"
+                        class="img-fluid rounded paciente-foto">
+                    {% endif %}
+                </div>
+            </div>
             {% else %}
-                <p class="text-muted">Este caso no tiene un paciente asignado.</p>
+            <p class="text-muted">Este caso no tiene un paciente asignado.</p>
             {% endif %}
 
-            {% with primera_etapa=caso.etapas.first %}
-                {% if primera_etapa %}
-                    <a href="{% url 'video_caso' pk=primera_etapa.pk %}"
-                        class="btn btn-start-caso-square">
-                        Ingresar al caso
-                    </a>
-                {% else %}
-                    <p class="text-muted mt-3">
-                        Este caso aún no tiene etapas creadas.
-                    </p>
-                {% endif %}
-            {% endwith %}
+
+            {% if caso.preguntas.all %}
+                <a href="{% url 'etapa_inicial' pk=caso.pk %}" class="btn btn-start-caso-square">
+                    Ingresar al caso
+                </a>
+            {% else %}
+                <p class="text-muted mt-3">
+                    Este caso aún no tiene preguntas creadas.
+                </p>
+            {% endif %}
 
 
 
@@ -72,4 +85,3 @@
 </div>
 
 {% endblock content %}
-
