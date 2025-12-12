@@ -10,22 +10,17 @@ class CasoClinico(models.Model):
     puntaje_total = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     video_motivo = models.URLField('Video motivo de consulta', null=True, blank=True)
 
-    def _str_(self):
-        return f"{self.id} - {self.nombre} - {self.descripción[:30]}"
+    def __str__(self):
+        return f"{self.nombre} - {self.descripción}"
     
 
 class InscripcionCaso(models.Model):
     estudiante = models.ForeignKey(User, on_delete=models.CASCADE)
     caso = models.ForeignKey(CasoClinico, on_delete=models.CASCADE)
-
-   
-    motivo = models.TextField(null=True, blank=True)
-    comentario = models.CharField(max_length=200, null=True, blank=True)
-
     fecha = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('estudiante', 'caso')  
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.estudiante.username} inscrito en {self.caso.nombre}"

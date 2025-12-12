@@ -15,6 +15,37 @@
     </div>
 </div>
 <!-- Hero End -->
+{% if messages %}
+  {% for message in messages %}
+    {% if 'success' in message.tags %}
+      <div class="modal fade" id="inscripcionOkModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title">Inscripción exitosa</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              {{ message }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var modal = new bootstrap.Modal(document.getElementById('inscripcionOkModal'));
+          modal.show();
+        });
+      </script>
+    {% endif %}
+  {% endfor %}
+{% endif %}
 
 <div class="container-fluid py-5">
     <div class="container py-5">
@@ -66,15 +97,31 @@
             {% endif %}
 
 
-            {% if caso.preguntas.all %}
-                <a href="{% url 'etapa_inicial' pk=caso.pk %}" class="btn btn-start-caso-square">
-                    Ingresar al caso
-                </a>
-            {% else %}
-                <p class="text-muted mt-3">
-                    Este caso aún no tiene preguntas creadas.
-                </p>
-            {% endif %}
+            {% if user.is_authenticated %}
+                {% if inscrito %}
+                    <div class="alert alert-success mt-3">
+                    Ya estás inscrito en este caso.
+                    </div>
+                    <a href="{% url 'etapa_inicial' caso.id %}" class="btn btn-primary mt-2">
+                        Ingresar al caso
+                    </a>
+                {% else %}
+                    <form method="post" action="{% url 'inscribir_caso' caso.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">
+                            Inscribirme en este caso
+                        </button>
+                    </form>
+                {% endif %}
+                {% else %}
+                <div class="alert alert-info mt-3">
+                    Debes iniciar sesión para inscribirte.
+                    <a href="{% url 'Aestudiante:login' %}?next={% url 'detalleCaso' caso.id %}" class="btn btn-sm btn-primary ms-2">
+                    Iniciar sesión
+                    </a>
+                </div>
+                {% endif %}
+
 
 
 

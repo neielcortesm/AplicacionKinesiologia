@@ -4,15 +4,13 @@ from .models import *
 
 class ExamenFAdmin(admin.ModelAdmin):
     list_display=(
-       'nombre', 
        'caso',
     )
-    search_fields=('nombre',)
+    search_fields=('caso',)
 
 class PreguntaEFAdmin(admin.ModelAdmin):
     list_display=(
        'texto', 
-       'subcategoria',
        'examen_final',
     )
     search_fields=('texto',)
