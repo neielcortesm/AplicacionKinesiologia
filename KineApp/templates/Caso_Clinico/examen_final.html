@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ caso.nombre }} - Examen final{% endblock %}
+
+{% block content %}
+<div class="container-fluid pb-5 bg-primary hero-header">
+    <div class="container py-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="hero-title mb-0 animated slideInLeft">Examen Final</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'examen_fisico' caso.id %}" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i>
+            Volver
+        </a>
+    </div>
+
+    <h3>Escribe el tratamiento que consideras más adecuado para este caso clínico.</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="tratamiento_alumno" class="form-label">Tu propuesta de tratamiento</label>
+            <textarea id="tratamiento_alumno"
+                      name="tratamiento_alumno"
+                      class="form-control"
+                      rows="6"
+                      required>{{ respuesta_alumno }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Enviar
+        </button>
+    </form>
+    <h1>    </h1>
+
+</div>
+
+{% if mostrar_resultado and examen %}
+<!-- Modal con tratamiento ideal -->
+<div class="modal fade" id="tratamientoIdealModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">Tratamiento propuesto vs tratamiento ideal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <h6>Tu tratamiento:</h6>
+        <p>{{ respuesta_alumno|linebreaksbr }}</p>
+
+        <hr>
+        <h6>Tratamiento ideal (docente):</h6>
+        <p>{{ examen.tratamiento|linebreaksbr }}</p>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var modal = new bootstrap.Modal(document.getElementById('tratamientoIdealModal'));
+      modal.show();
+  });
+</script>
+{% endif %}
+{% endblock %}
