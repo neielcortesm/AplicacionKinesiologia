@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Docente{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Panel de docente</h1>
+  <p>Bienvenido, {{ docente.nombre }} {{ docente.apellido }}.</p>
+
+  <div class="mt-3">
+    <a href="{% url 'inscripciones_por_caso' %}" class="btn btn-primary">
+      Ver inscripciones a casos clínicos
+    </a>
+    <h1>    </h1>
+  </div>
+</div>
+{% endblock %}
