@@ -55,3 +55,38 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+*Ejecución del Proyecto con Docker
+
+El proyecto cuenta con configuración Docker que permite levantar el sistema completo mediante contenedores, asegurando un entorno de ejecución estandarizado y reproducible.
+
+Archivos incluidos en el proyecto:
+- Dockerfile
+- docker-compose.yml
+- archivo .env para variables de entorno
+
+Configuración de variables de entorno (.env):
+POSTGRES_DB=db_kine  
+POSTGRES_USER=user_kine  
+POSTGRES_PASSWORD=kine1234  
+POSTGRES_HOST=db  
+POSTGRES_PORT=5432  
+
+
+Ejecución del sistema con Docker:
+docker compose up --build
+
+Acceso al sistema:
+Aplicación web: http://localhost:8000/  
+Panel de administración: http://localhost:8000/admin/
+
+Comandos adicionales útiles:
+docker compose exec web python manage.py createsuperuser  
+docker compose exec web python manage.py collectstatic --noinput  
+
+Detención de los contenedores:
+docker compose down
+
+El sistema se ejecuta correctamente en Docker, incluyendo el contenedor web correspondiente a Django y el contenedor de base de datos PostgreSQL, con migraciones aplicadas y acceso funcional desde el navegador.
+
+Nota: En la ejecución con Docker, la base de datos se configura automáticamente mediante el archivo .env y docker-compose.yml, sin necesidad de modificar settings.py.
