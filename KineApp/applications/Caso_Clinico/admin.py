@@ -9,3 +9,4 @@ class CasoAdmin(admin.ModelAdmin):
     )
     search_fields=('nombre',)
 admin.site.register(CasoClinico, CasoAdmin)
+admin.site.register(InscripcionCaso)

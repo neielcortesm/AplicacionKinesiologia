@@ -35,7 +35,7 @@ def login_view(request):
 
     # 🔁 envía al HOME
     # Si tu URL del home se llama 'home', usa:
-            return redirect('Inicio')
+            return redirect('panel_docente')
         messages.error(request, "Correo o contraseña incorrectos.")
 
     return render(request, 'login.html')
@@ -57,4 +57,4 @@ def panel_docente(request):
         messages.warning(request, "Tu sesión ya no es válida. Inicia nuevamente.")
         return redirect('login')
 
-    return render(request, 'panel_docente.html', {'docente': docente})
+    return render(request, 'docente/panel_docente.html', {'docente': docente})

@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ caso.nombre }} - Amnesis{% endblock %}
+{% block title %}{{ caso.nombre }} - Anamnesis {% endblock %}
 
 {% block content %}
 {% if messages %}
     {% for message in messages %}
         {% if 'error' in message.tags %}
-            <!-- Modal de error -->
             <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -41,7 +40,7 @@
     <div class="container py-5">
         <div class="row g-3 align-items-center">
             <div class="col-lg-6 text-center text-lg-start">
-                <h1 class="hero-title mb-0 animated slideInLeft">Caso Clínico</h1>
+                <h1 class="hero-title mb-0 animated slideInLeft">Entrevista Clínica</h1>
             </div>
         </div>
     </div>
@@ -66,22 +65,21 @@
     {% endif %}
 </div>
 
-
 <div class="container mt-4">
     <div class="container-fluid bg-light py-5">
-        <h2>Subcategorías de preguntas (Amnesis)</h2>
+        <h2>Subcategorías de preguntas (Anamnesis)</h2>
         <div class="row">
             {% for key, nombre in subcategorias %}
             <div class="col-md-4 mb-3">
                 <div class="card h-100 text-center">
                     <img src="{% static 'img/subcats/' %}{{ key }}.jpg"
-                        class="card-img-top"
-                        style="max-height: 180px; width: 100%; object-fit: contain; padding: 1rem;"
-                        alt="{{ nombre }}">
+                         class="card-img-top"
+                         style="max-height: 180px; width: 100%; object-fit: contain; padding: 1rem;"
+                         alt="{{ nombre }}">
                     <div class="card-body">
                         <h4 class="card-title mb-3">{{ nombre }}</h4>
                         <a href="{% url 'etapa_inicial' caso.id %}?subcategoria={{ key }}"
-                        class="btn btn-primary">
+                           class="btn btn-primary">
                             Ver preguntas
                         </a>
                     </div>
@@ -91,29 +89,54 @@
         </div>
     </div>
 
-    {% if preguntas %}
-    <hr class="mt-4">
-    <h3>Preguntas: {{ subcategoria_nombre }}</h3>
+    {% if subcategoria_key %}
+        {% if preguntas %}
+            <hr class="mt-4">
+            <h3>Preguntas: {{ subcategoria_nombre }}</h3>
 
-    <form method="post" class="mt-3">
-        {% csrf_token %}
-        <div class="list-group mb-3">
-            {% for p in preguntas %}
-            <label class="list-group-item">
-                <input type="radio"
-                    name="pregunta"
-                    value="{{ p.id }}"
-                    class="form-check-input me-1">
-                {{ p.texto }}
-            </label>
-            {% endfor %}
-        </div>
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                <div class="list-group mb-3">
+                    {% for p in preguntas %}
+                    <label class="list-group-item">
+                        <input type="radio"
+                            name="pregunta"
+                            value="{{ p.id }}"
+                            class="form-check-input me-1">
+                        {{ p.texto }}
+                    </label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+                <h1>    </h1>
+            </form>
+        {% else %}
+            <p class="mt-4">No hay preguntas en esta subcategoría.</p>
+        {% endif %}
 
-        <button type="submit" class="btn btn-primary">Aceptar</button>
-    </form>
+        <!-- **NUEVA LÓGICA PARA BOTÓN EXAMEN FÍSICO** -->
+        {% if mostrar_examen_fisico %}
+            <div class="alert alert-success mt-4">
+                <h4>¡Excelente! Has completado todas las preguntas de Anamnesis</h4>
+                <p>Ahora procede al <strong>Examen Físico</strong>.</p>
+                <a href="{% url 'examen_fisico' caso.id %}" 
+                class="btn btn-success btn-lg">
+                    <i class="fas fa-stethoscope me-2"></i>
+                    Ir al Examen Físico
+                </a>
+            </div>
+        {% elif siguiente_subcategoria %}
+            <div class="alert alert-info mt-4">
+                Ya no quedan preguntas correctas en esta subcategoría.
+                Continúa con <strong>{{ siguiente_subcategoria|title }}</strong>.
+                <a href="{% url 'etapa_inicial' caso.id %}?subcategoria={{ siguiente_subcategoria }}"
+                class="btn btn-sm btn-primary ms-2">
+                    Ir a {{ siguiente_subcategoria|title }}
+                </a>
+            </div>
+        {% endif %}
     {% endif %}
 
 
-    
 </div>
 {% endblock %}

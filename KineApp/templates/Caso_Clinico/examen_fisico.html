@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ caso.nombre }} - Examen físico{% endblock %}
+
+{% block content %}
+<div class="container-fluid pb-5 bg-primary hero-header">
+    <div class="container py-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="hero-title mb-0 animated slideInLeft">Examen Físico</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'etapa_inicial' caso.id %}" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i>
+            Volver
+        </a>
+    </div>
+
+    <h3> Selecciona las maniobras que considerarías pertinentes realizar al paciente.</h3>
+
+    <div class="text-center mb-3">
+        <img src="{% static 'img/maniobras.png' %}"
+             alt="Esquema de maniobras de examen físico"
+             class="img-fluid"
+             style="max-height: 250px;">
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="list-group mb-3">
+            {% for m in maniobras %}
+            <label class="list-group-item">
+                <input type="checkbox"
+                       name="maniobras"
+                       value="{{ m.id }}"
+                       class="form-check-input me-1"
+                       {% if m.id in seleccionadas %}checked{% endif %}>
+                {{ m.texto }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Validar selección</button>
+    </form>
+    <h1>    </h1>
+</div>
+
+
+{% if paso_examen_final %}
+<!-- Modal de éxito -->
+<div class="modal fade" id="examenFinalModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Has avanzado al examen final</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        Has seleccionado correctamente todas las maniobras pertinentes.
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'examen_final' caso.id %}" class="btn btn_success">
+          Ir al examen final
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var modal = new bootstrap.Modal(document.getElementById('examenFinalModal'));
+      modal.show();
+  });
+</script>
+
+{% elif paso_examen_final is not None %}
+<!-- Modal de error -->
+<div class="modal fade" id="examenErrorModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Selección incorrecta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        No has seleccionado todas las maniobras correctas. Intenta de nuevo.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+          Volver a intentar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var modal = new bootstrap.Modal(document.getElementById('examenErrorModal'));
+      modal.show();
+  });
+</script>
+{% endif %}
+
+{% endblock %}

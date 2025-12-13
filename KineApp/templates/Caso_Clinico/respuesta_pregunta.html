@@ -9,6 +9,7 @@
     <div class="d-flex justify-content-end mb-3">
         <a href="{% url 'etapa_inicial' caso.id %}" class="btn btn-primary">
             <i class="bi bi-arrow-left"></i>
+            Volver
         </a>
     </div>
 
@@ -29,14 +30,7 @@
     {% else %}
         <p>No se encontró video para esta pregunta.</p>
     {% endif %}
-
-    <hr>
-    <h3>Preguntas de {{ subcategoria_nombre }}</h3>
-    <ul class="list-group mb-3">
-        {% for p in preguntas %}
-        <li class="list-group-item">{{ p.texto }}</li>
-        {% endfor %}
-    </ul>
+    
 
 </div>
 {% endblock %}

@@ -81,7 +81,7 @@
                         </a>
 
                         <a href="{% url 'listAllCasos' %}" class="nav-item nav-link">Casos Clínicos</a>
-                        <a href="{% url 'listByCategoriaCasos' %}" class="nav-item nav-link">Categorías</a>
+                        <a href="{% url 'list_categorias' %}" class="nav-item nav-link">Categorías</a>
 
                         <!-- Cerrar sesión -->
                         <a href="{% url 'Aestudiante:logout' %}" class="nav-item nav-link text-danger">
@@ -92,6 +92,9 @@
                         <!-- USUARIO NO LOGUEADO -->
                         <a href="{% url 'Aestudiante:login' %}" class="nav-item nav-link text-primary fw-bold">
                             Acceso Estudiante
+                        </a>
+                        <a href="{% url 'login' %}" class="nav-item nav-link text-secondary fw-bold">
+                            Acceso Docente
                         </a>
                     {% endif %}
 
@@ -151,7 +154,7 @@
                 <h5 class="text-white mb-4">Enlaces</h5>
                 <p><a class="btn btn-link" href="{% url 'Inicio' %}">Inicio</a></p>
                 <p><a class="btn btn-link" href="{% url 'listAllCasos' %}">Casos Clínicos</a></p>
-                <p><a class="btn btn-link" href="{% url 'listByCategoriaCasos' %}">Categorías</a></p>
+                <p><a class="btn btn-link" href="{% url 'list_categorias' %}">Categorías</a></p>
             </div>
 
         </div>

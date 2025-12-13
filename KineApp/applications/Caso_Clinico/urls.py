@@ -4,7 +4,11 @@ from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from . import views
 from .views import ListAllCasos, DetailCaso, EtapaInicialView, respuesta_pregunta
-
+from .views import ExamenFisicoView, ExamenFinalView
+from .views import ListCategoriasView
+from .views import InscribirCasoView
+from .views import inscripciones_por_caso
+from django.urls import path, include
 
 urlpatterns = [
     path('', login_required(views.Inicio.as_view(), login_url='Aestudiante:login'), name='Inicio'),
@@ -28,4 +32,23 @@ urlpatterns += [
         respuesta_pregunta,
         name='respuesta_pregunta'
     ),
+]
+
+urlpatterns += [
+    path('examen_fisico/<int:pk>/', ExamenFisicoView.as_view(), name='examen_fisico'),
+    path('examen_final/<int:pk>/', ExamenFinalView.as_view(), name='examen_final'),
+]
+urlpatterns += [
+    path('list_categorias/', ListCategoriasView.as_view(), name='list_categorias'),
+]
+# urls.py del app de casos
+
+urlpatterns += [
+    path('caso/<int:pk>/inscribir/', InscribirCasoView.as_view(), name='inscribir_caso'),
+]
+
+
+urlpatterns += [
+    path('perfil/', include('applications.Perfil.urls')),
+    path('docente/inscripciones/', inscripciones_por_caso, name='inscripciones_por_caso'),
 ]
